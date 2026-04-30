@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+@theme {
+    --color-yellow-otto: #E7B901;
+    --color-yellow-otto-light: #FFD630;
+}
