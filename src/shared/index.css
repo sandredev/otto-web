@@ -4,6 +4,7 @@
     --color-yellow-otto: #E7B901;
     --color-yellow-otto-light: #FFD630;
     --color-graywhite: #F9FAFB;
-    --breakpoint-landscape: (orientation: landscape);
-    --breakpoint-portrait: (orientation: portrait);
 }
+
+@custom-variant landscape (@media (orientation: landscape));
+@custom-variant portrait (@media (orientation: portrait));

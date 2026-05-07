@@ -4,19 +4,19 @@ import { Link } from 'react-router';
 /*Falta hacerlo responsive*/
 export default function Auth() {
     return (
-        <div className='bg-yellow-otto-light w-full min-h-screen px-8 flex items-center justify-center'>
-            <div className='grid grid-cols-1 md:grid-cols-2 landscape:grid-cols-2 w-full max-w-6xl gap-y-10 items-center'>
-                <div className='flex justify-center items-center md:justify-start'>
+        <div className='bg-yellow-otto-light w-full min-h-dvh px-8 flex items-center justify-center'>
+            <div className='grid portrait:grid-cols-1 landscape:grid-cols-2 w-full max-w-6xl gap-y-10 items-center'>
+                <div className='flex items-center justify-center'>
                     <img
                             src={logoOtto}
                             alt='Logo Otto'
-                            className='aspect-square w-[clamp(12rem,30vw+10vh,40rem)] max-w-md h-auto object-fit drop-shadow-black'
+                            className='aspect-square w-[clamp(12rem,30vw+10vh,40rem)] max-w-md h-auto max-md:landscape:w-50 object-fit drop-shadow-black'
                     />
                 </div>
-                <section className='bg-white rounded-[3rem] shadow-2xl py-5 sm:py-7 md:py-10 lg:py-14 w-full max-w-2xl grid gap-3 
-                                        items-center text-[clamp(0.75rem,calc(1vw+1vh),1rem)]'>
+                <section className='bg-white rounded-[3rem] shadow-2xl px-2 py-6 sm:py-7 md:py-10 lg:py-14 w-full grid max-w-2xl gap-3 
+                                        items-center text-[clamp(0.6rem,calc(1vw+1vh),1rem)] max-md:landscape:py-3 justify-self-center'>
                     <div className='flex flex-col items-center justify-center'>
-                        <h1 className='font-extrabold text-[clamp(1.8rem,calc(2vw+2vh),3rem)] text-center'>Inicio de sesión</h1>
+                        <h1 className='font-extrabold text-[clamp(1.6rem,calc(2vw+2vh),3rem)] text-center'>Inicio de sesión</h1>
                         <h3 className='text-center'>¡Bienvenido/a de vuelta!</h3>
                     </div>
                     <div className='flex flex-col items-center gap-y-2 sm:gap-y-5 px-5 sm:px-10'>
@@ -28,8 +28,8 @@ export default function Auth() {
                                 <input
                                     type='email'
                                     placeholder='Ingresa tu correo electrónico'
-                                    className='w-full rounded-md border border-gray-300 px-4 py-3 text-gray-700 placeholder-gray-400 
-                                            focus:outline-none focus:ring-2 focus:ring-yellow-500 h-8 sm:h-10 md:h-13'
+                                    className='w-full rounded-md border border-gray-300 px-2 py-3 text-gray-700 placeholder-gray-400 
+                                            focus:outline-none focus:ring-2 focus:ring-yellow-500 h-8 sm:h-10 md:h-13 max-md:landscape:h-10'
                                 />
                             </div>
                             <div className='flex flex-col gap-2'>
@@ -39,8 +39,8 @@ export default function Auth() {
                                 <input
                                     type='password'
                                     placeholder='Ingresa tu contraseña'
-                                    className='w-full rounded-md border border-gray-300 px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none 
-                                            focus:ring-2 focus:ring-yellow-500 h-8 sm:h-10 md:h-13'
+                                    className='w-full rounded-md border border-gray-300 px-2 py-3 text-gray-700 placeholder-gray-400 focus:outline-none 
+                                            focus:ring-2 focus:ring-yellow-500 h-8 sm:h-10 md:h-13 max-md:landscape:h-10'
                                 />
                             </div>
                             
@@ -48,7 +48,7 @@ export default function Auth() {
                                 <button 
                                     type='submit'
                                     className='bg-yellow-otto text-white font-medium rounded-md py-3 w-full hover:brightness-95 transition-all
-                                                h-8 sm:h-8 md:h-11 flex justify-center items-center cursor-pointer'
+                                                h-8 sm:h-8 md:h-11 max-md:landscape:h-10 flex justify-center items-center cursor-pointer'
                                 >
                                     Iniciar sesión
                                 </button>
