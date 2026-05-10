@@ -1,3 +1,5 @@
+import '../layout/RegisterData.css';
+
 export default function Options({name}){
     return(
         <label>

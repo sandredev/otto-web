@@ -1,4 +1,4 @@
-import Table from "../shared/Table/Table";
+import Table from "../../shared/Table/Table";
 
 export default function diarySales(){
     /*Esto solo es de prueba*/
@@ -36,12 +36,13 @@ export default function diarySales(){
     })
 
     return(
-        <section>
-            <div>
+        <section className="bg-[--color-graywhite] min-h-full p-8">
+
+            <div className=" flex flex-row text-4xl font-black text-black tracking-tighter text-left mb-6">
                 <h1>{`Ventas del ${fechaFormateada}`}</h1>
             </div>
 
-            <div>
+            <div className="flex items-center justify-start w-full h-full">
                 <Table
                     rowData={sales}
                 />

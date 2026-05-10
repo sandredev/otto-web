@@ -3,11 +3,15 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import { faMinus } from "@fortawesome/free-solid-svg-icons"
 import { useState } from "react"
 import OptionsContain from "../components/OptionsContain";
+import InputBasic from "../../shared/components/InputBasic.jsx";
+import PrimaryButton from "../../shared/components/PrimaryButton.jsx";
+import "./RegisterData.css"
 
 export default function RegisterData(){
 
     const [count,setCount] = useState(0);
     return(
+
         <form>
             <section className="mainContainer">
                 <div className="leftSide">
@@ -15,7 +19,7 @@ export default function RegisterData(){
                     <div className="paymentMethod">
                         <h2>Método de pago</h2>
                         <OptionsContain 
-                            options={["Efectivo, Transferencia"]}
+                            options={["Efectivo", "Transferencia"]}
                         />
                     </div>
 
@@ -23,12 +27,12 @@ export default function RegisterData(){
                         <div className="OptionsContain">
                             <h2>Adicionales</h2>
                             <OptionsContain 
-                                options={["Gaseosa, tocineta"]}
+                                options={["Gaseosa", "tocineta"]}
                             />
                         </div>
                     </div>
 
-                    <div>
+                    <div className="add-container">
                         <button 
                             type="button"
                             className="plus" 
@@ -52,21 +56,32 @@ export default function RegisterData(){
                     <h2>Pago</h2>
                     <div>
                         <p>Cantidad pagada en efectivo</p>
-                        <input type="number" placeholder="$0-$20.000"/>
+                        <InputBasic 
+                            type={'Number'} 
+                            placeholder={'$0-$20.000'} 
+                            name={'payedWithCash'}
+                        />
                     </div>
                     <div>
                         <p>Cantidad pagada con transfarencia</p>
-                        <input type="number" placeholder="$0-$20.000"/>
+                        <InputBasic 
+                            type={'Number'} 
+                            placeholder={'$0-$20.000'} 
+                            name={'payedWithCash'}
+                        />
                     </div>
                 </div>
 
-                <div>
-                    <button type="submit">
-                        Registar Venta
-                    </button>
+                <div className="Button-register-container">
+                    <PrimaryButton 
+                        text={'Registrar venta'}
+                        type={'submit'}
+                    />
                 </div>
 
             </section>
         </form>
+        
     )
+
 }

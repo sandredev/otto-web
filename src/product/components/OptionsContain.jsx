@@ -1,3 +1,5 @@
+import '../layout/RegisterData.css';
+
 import Options from "./Options";
 
 export default function OptionsContain({options}){
