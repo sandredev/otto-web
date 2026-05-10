@@ -20,6 +20,7 @@ export default function Sidebar({ className }) {
                 <FontAwesomeIcon icon={faBoxOpen} className='text-2xl sm:text-3xl lg:text-4xl'/>
                 Historial
             </NavLink>
+
             <NavLink to='/home' className={({isActive}) => `flex flex-col items-center w-full py-2 
                         gap-y-3 ${isActive ? 'border-l-6 border-l-graywhite' : ''} hover:bg-white/40 transition-all mt-auto`}>
                 <FontAwesomeIcon icon={faRightFromBracket} className='text-2xl sm:text-3xl lg:text-4xl'/>
