@@ -7,7 +7,7 @@ export default function OptionsContain({options}){
         <div className="OptionsContain">
             {options.map((element,key) => (
                 <Options key={key} name={element}/>
-            ))};
+            ))}
         </div>
     )
 }

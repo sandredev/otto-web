@@ -10,8 +10,7 @@ import "./RegisterData.css"
 export default function RegisterData(){
 
     const [count,setCount] = useState(0);
-    return(
-
+    return (
         <form>
             <section className="mainContainer">
                 <div className="leftSide">
@@ -81,7 +80,5 @@ export default function RegisterData(){
 
             </section>
         </form>
-        
-    )
-
+    );
 }
