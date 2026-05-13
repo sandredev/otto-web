@@ -1,0 +1,44 @@
+.btn--primary{
+    background-color: #E7B901 ;
+    color: white; 
+    font-weight: 500;
+    border-radius: 6px; 
+    padding: 10px 12px;
+    width: auto; 
+    filter: brightness(1);
+    transition: all;
+}
+.btn--primary:hover{
+    filter: brightness(0.95);
+} 
+
+.btn--cancel{
+    background-color: #FF2323 ;
+    color: white; 
+    font-weight: 500;
+    border-radius: 6px; 
+    padding: 10px 12px;
+    width: auto; 
+    filter: brightness(1);
+    transition: all;
+}
+.btn--cancel:hover{
+    filter: brightness(0.95);
+} 
+
+.alert--container{
+    background-color: white;
+    border-radius: 6px;
+}
+.swal2-backdrop-show{
+    background: rgba(86, 86, 86, 0.2) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+.swal2-actions{
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}

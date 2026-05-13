@@ -1,0 +1,143 @@
+
+.mainContainer{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr auto;
+    grid-template-areas: 
+        'left right'
+        'button button';
+    padding: 1.875rem;
+    background-color: white;
+    color: black;
+
+    max-width: 900px;
+    margin: auto;
+    gap: 2rem;
+}
+
+.leftSide{
+    grid-area: left;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 1.5rem;
+    text-align: left;
+    color: black;
+}
+
+.leftSide h2{
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: .5rem;
+}
+.rightSide{
+    grid-area: right;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: left;
+    color: black;
+}
+
+.rightSide h2{
+    font-size: 2rem;
+    font-weight: bold;
+
+    margin-bottom: .5rem;
+}
+.rightSide div{
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.Button-register-container{
+    grid-area: button;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+
+    margin-top: 1rem;
+}
+
+.OptionsContain{
+    display: flex;
+    flex-direction: column;
+
+    gap: .5rem;
+}
+.OptionsContain label{
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+
+/*adicionales*/
+.add-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: #e7e7e7;
+    border-radius: 50px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    color: black;
+
+    width: 180px;
+    padding: .5rem 1rem;
+}
+
+.add-container button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:none;
+    outline: none;
+    border: none;
+
+    cursor: pointer;
+    font-size: 1.1rem;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+
+    transition: .2s;
+}
+.add-container button:hover{
+    background-color: rgba(0,0,0,0.1);
+}
+
+.add-container input{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:none;
+    outline: none;
+    border: none;
+    
+    width: 50px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+@media (max-width: 768px){
+
+    .mainContainer{
+        grid-template-columns: 1fr;
+
+        grid-template-areas: 
+            'left'
+            'right'
+            'button';
+    }
+
+}
