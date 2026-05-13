@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import AdminButton from "../../shared/components/AdminButton";
-import alertDesicion from "../../lib/utils/alertDesicion";
+import alertDesicion from "../../li/utils/alertDesicion";
 import alertPop from "../../lib/utils/alertPop.js";
 
 export default function ProductListCard({name, img}){

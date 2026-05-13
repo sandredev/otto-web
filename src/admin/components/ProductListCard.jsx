@@ -1,7 +1,40 @@
 import { Link } from "react-router";
 import AdminButton from "../../shared/components/AdminButton";
+import alertDesicion from "../../utils/alertDesicion";
+import alertPop from "../../utils/alertPop";
 
 export default function ProductListCard({name, img}){
+
+    //BACKEND: toca poner la logica de eliminar un producto
+    //FRONTEND: conectar el editar con su respectiva vista
+    const handleDelete = async () =>{
+        const result = await alertDesicion(
+            '¿DESEA ELIMINAR ESTE PRODUCTO?',
+            'Presione confirmar para completar proceso',
+            'info',
+            'Eliminar',
+            'Cancelar'
+        )
+        if(result.isConfirmed){
+            try {
+                await alertPop(
+                    'PRODUCTO ELIMINADO CON EXITO', 
+                    'Proceso realizado con exito', 
+                    'success', 
+                    'Continuar'
+                )
+            } catch (error) {
+                await alertPop(
+                    'NO SE PUDO ELIMINAR EL PRODUCTO', 
+                    'No se pudo terminar el proceso', 
+                    'error', 
+                    'Continuar'
+                )
+            }
+        }
+
+    }
+
     return(
         <section className="flex flex-row items-center justify-between py-5 px-6 w-full border-b border-gray-200 last:border-none">
 
