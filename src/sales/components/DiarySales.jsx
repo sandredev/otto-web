@@ -1,4 +1,4 @@
-import Table from "@/shared/Table/Table";
+import Table from "@/shared/table/Table";
 
 export default function diarySales(){
     /*Esto solo es de prueba*/
