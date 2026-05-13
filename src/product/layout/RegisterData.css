@@ -27,11 +27,7 @@
 }
 
 .leftSide h2{
-<<<<<<< HEAD
-    font-size: 2rem;
-=======
     font-size: 1.8rem;
->>>>>>> ad14cd14bb79c261220ddfab54334ca6b77b01e6
     font-weight: bold;
     margin-bottom: .5rem;
 }
@@ -45,11 +41,7 @@
 }
 
 .rightSide h2{
-<<<<<<< HEAD
-    font-size: 2rem;
-=======
     font-size: 1.8rem;
->>>>>>> ad14cd14bb79c261220ddfab54334ca6b77b01e6
     font-weight: bold;
 
     margin-bottom: .5rem;
@@ -65,19 +57,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-<<<<<<< HEAD
-    width: 100%;
-    height: auto;
-
-    margin-top: 1rem;
-=======
     width: 80%;
     height: auto;
     gap: 30px;
 
     margin-top: 1rem;
     justify-self: center;
->>>>>>> ad14cd14bb79c261220ddfab54334ca6b77b01e6
 }
 
 .OptionsContain{
@@ -97,39 +82,27 @@
 
 
 /*adicionales*/
-<<<<<<< HEAD
-=======
 .subTitle{
     font-weight: bold;
     font-size: 40px;
 }
 
->>>>>>> ad14cd14bb79c261220ddfab54334ca6b77b01e6
 .add-container{
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-<<<<<<< HEAD
-    background-color: #e7e7e7;
-    border-radius: 50px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.3);
-=======
     background-color: #f5f5f5;
     border-radius: 50px;
     box-shadow: 0 0 20px rgba(20, 20, 20, 0.3);
->>>>>>> ad14cd14bb79c261220ddfab54334ca6b77b01e6
     color: black;
 
     width: 180px;
     padding: .5rem 1rem;
-<<<<<<< HEAD
-=======
     transition: all ease 0.3s;
 }
 .add-container:hover{
     box-shadow: 0 0 20px rgba(2, 2, 2, 0.5);
->>>>>>> ad14cd14bb79c261220ddfab54334ca6b77b01e6
 }
 
 .add-container button{

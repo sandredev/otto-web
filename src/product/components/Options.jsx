@@ -1,15 +1,4 @@
 import '../layout/RegisterData.css';
-<<<<<<< HEAD
-
-export default function Options({name}){
-    return(
-        <label>
-            <input type="checkbox" name={name} required/>
-            {name}
-        </label>
-    )
-
-=======
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 
@@ -53,5 +42,4 @@ export default function Options({ name, mode = "counter", value, onChange }) {
             </div>
         </div>
     );
->>>>>>> ad14cd14bb79c261220ddfab54334ca6b77b01e6
 }

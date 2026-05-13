@@ -1,19 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faArrowLeft} from '@fortawesome/free-solid-svg-icons'
-<<<<<<< HEAD
-
-export default function HeadSection({img,productName}){
-    return(
-    <section className='flex relative flex-col justify-center items-center gap-4 bg-[--color-yellow-otto] p-10 pt-16'>
-        
-        <button className="absolute top-6 left-6 text-white p-2">
-            <span className="inline-block transition-transform duration-300 hover:-translate-x-1">
-                <FontAwesomeIcon icon={faArrowLeft} size="lg" />
-            </span>
-        </button>
-
-        <div className='w-48 md:w-64 drop-shadow-2xl'>
-=======
 import { Link } from 'react-router';
 
 export default function HeadSection({img,productName}){
@@ -28,7 +14,6 @@ export default function HeadSection({img,productName}){
         </Link>
 
         <div className='w-48 md:w-64 drop-shadow-2xl p-3'>
->>>>>>> ad14cd14bb79c261220ddfab54334ca6b77b01e6
             <img 
                 src={img} 
                 alt={productName}  

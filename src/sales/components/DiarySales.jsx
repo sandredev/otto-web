@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import Table from "../../shared/Table/Table";
-=======
 import Table from "@/shared/table/Table";
->>>>>>> ad14cd14bb79c261220ddfab54334ca6b77b01e6
 
 export default function diarySales(){
     /*Esto solo es de prueba*/
