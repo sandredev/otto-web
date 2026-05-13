@@ -1,5 +1,7 @@
-import { BrowserRouter, Routes, Route } from 'react-router'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router'
 import Auth from '@/auth/Auth'
+import Login from '@/auth/Login';
+import Register from '@/auth/Register';
 import Home from '@/home/Home'
 import SalesLayout from '@/sales/layout/SalesLayout';
 import RegisterSales from '@/sales/components/RegisterSales';
@@ -14,14 +16,16 @@ export default function AppRouter() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={<Auth />} />
+                <Route path='auth' element={<Auth />}>
+                    <Route index element={<Login />} />
+                    <Route path='register' element={<Register />} />
+                </Route>
+                <Route path='home' element={<Home />} />
 
-                <Route path='/home' element={<Home />} />
-
-                <Route path='/sales' element={<SalesLayout />}>
+                <Route path='sales' element={<SalesLayout />}>
                     <Route index element={<RegisterSales />} />
-                    <Route path='/sales/money' element={<SalesMoney />} />
-                    <Route path='/sales/history' element={<DiarySales />} />
+                    <Route path='money' element={<SalesMoney />} />
+                    <Route path='history' element={<DiarySales />} />
                     {/*Imagen y nombre del producto plantillas*/}
                 </Route>
                 
@@ -31,6 +35,7 @@ export default function AppRouter() {
                 <Route path='/admin' element={<AdminView />}>
                     <Route path='/admin/editProduct' element={<EditProduct />} />
                 </Route>
+                <Route path='/' element={<Navigate to='/auth' />} />
             </Routes>
         </BrowserRouter>
     );
