@@ -1,19 +1,39 @@
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faBox, faX } from '@fortawesome/free-solid-svg-icons';
+import alertDesicion from '../utils/alertDesicion';
 
 export default function Home({ userName = 'user' }) {
+
+    const navigate = useNavigate();
+
+    //BACKEND: logica para cerrar sesión
+    const handleClose = async (e) => {
+        e.preventDefault();
+
+        const result = await alertDesicion(
+            '¿DESEA CERRAR SESIÓN?',
+            'Presione confirmar para completar proceso',
+            'info',
+            'Cerrar sesión',
+            'Cancelar'
+        )
+
+        if(result.isConfirmed){
+            navigate('/');
+        }else{
+            navigate('/home')
+        }
+    }
+
     return (
         <div className='bg-yellow-otto-light w-full h-screen relative flex flex-col justify-center items-center'>
 
             {/*Cerrar sesión*/}
-            <Link to='/'>
-                <button type='button' className='bg-white p-2 sm:px-4 sm:py-2 rounded-2xl absolute top-1 right-1 lg:top-4 lg:right-4 flex items-center gap-x-1 
-                            text-xs sm:text-sm md:text-base lg:text-lg cursor-pointer'>
+                <button type='button' onClick={handleClose} className='bg-white p-2 sm:px-4 sm:py-2 rounded-2xl absolute top-1 right-1 lg:top-4 lg:right-4 flex items-center gap-x-1 text-xs sm:text-sm md:text-base lg:text-lg cursor-pointer'>
                     <FontAwesomeIcon icon={faX} className='sm:mr-2'/>
                     <span className='hidden sm:block'>Cerrar sesión</span>
                 </button>
-            </Link>
 
             {/*titulo*/}
             <div className='flex flex-col gap-2 items-center justify-center'>

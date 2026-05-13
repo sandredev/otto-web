@@ -8,6 +8,7 @@ import DiarySales from '@/sales/components/DiarySales';
 import GeneralSales from '@/generalSalesHistory/GeneralSales';
 import AdminView from '@/admin/AdminView';
 import EditProduct from '@/admin/layout/EditProduct';
+import Product from '@/product/Product.jsx';
 
 export default function AppRouter() {
     return (
@@ -21,7 +22,9 @@ export default function AppRouter() {
                     <Route index element={<RegisterSales />} />
                     <Route path='/sales/money' element={<SalesMoney />} />
                     <Route path='/sales/history' element={<DiarySales />} />
+                    <Route path='/sales/product/:productId' element={<Product/>}/>
                 </Route>
+
                 <Route path='/generalhistory' element={<GeneralSales />} />
                 <Route path='/admin' element={<AdminView />}>
                     <Route path='/admin/editProduct' element={<EditProduct />} />
