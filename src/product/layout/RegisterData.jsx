@@ -12,15 +12,19 @@ const ADDITIONALS = ["Gaseosa", "Tocineta"];
 const PAYMENT_METHODS = ["Efectivo", "Transferencia"];
 
 const initialAdditionals = () =>
-    Object.fromEntries(ADDITIONALS.map((a) => [a, 0]));
+    Object.fromEntries(ADDITIONALS.map((a) => [a, false]));
 
 const initialPayments = () =>
-    Object.fromEntries(PAYMENT_METHODS.map((p) => [p, false]));
+    Object.fromEntries(PAYMENT_METHODS.map((payment) => [payment, 0]));
+
+const initialPaymentMethods = () =>
+    Object.fromEntries(PAYMENT_METHODS.map((method) => [method, false]));
 
 export default function RegisterData() {
-    const [sandwichCount, setSandwichCount] = useState(0);
+    const [sandwichCount, setSandwichCount] = useState(1);
     const [additionals, setAdditionals] = useState(initialAdditionals);
     const [payments, setPayments] = useState(initialPayments);
+    const [paymentsMethods, setPaymentMethods] = useState(initialPaymentMethods);
     const navigate = useNavigate();
     const formRef = useRef(null);
 
@@ -32,9 +36,13 @@ export default function RegisterData() {
         setPayments((prev) => ({ ...prev, [name]: Number(value) }));
     };
 
+    const handlePaymentMethodChange = (name, value) => {
+        setPaymentMethods((prev) => ({ ...prev, [name]: value }));
+    }
+
     const handleReset = () => {
         formRef.current.reset();
-        setSandwichCount(0);
+        setSandwichCount(1);
         setAdditionals(initialAdditionals());
         setPayments(initialPayments());
     };
@@ -76,7 +84,7 @@ export default function RegisterData() {
                         <OptionsContain
                             options={PAYMENT_METHODS}
                             quantities={payments}
-                            onQuantityChange={handlePaymentChange}
+                            onQuantityChange={handlePaymentMethodChange}
                             mode="selector"
                         />
                     </div>
@@ -87,6 +95,7 @@ export default function RegisterData() {
                             options={ADDITIONALS}
                             quantities={additionals}
                             onQuantityChange={handleAdditionalChange}
+                            mode="selector"
                         />
                     </div>
 
@@ -118,24 +127,32 @@ export default function RegisterData() {
 
                 <div className="rightSide">
                     <h2>Pago</h2>
-                    <div>
-                        <p>Cantidad pagada en efectivo</p>
-                        <InputBasic
-                            type={"Number"}
-                            placeholder={"$0-$20.000"}
-                            name={"payedWithCash"}
-                            onChange={(e) => handlePaymentChange("Efectivo", e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <p>Cantidad pagada con transferencia</p>
-                        <InputBasic
-                            type={"Number"}
-                            placeholder={"$0-$20.000"}
-                            name={"payedWithTransfer"}
-                            onChange={(e) => handlePaymentChange("Transferencia", e.target.value)}
-                        />
-                    </div>
+                    {
+                        paymentsMethods["Efectivo"] && (
+                            <div>
+                                <p>Cantidad pagada en efectivo</p>
+                                <InputBasic
+                                    type={"Number"}
+                                    placeholder={"$0-$20.000"}
+                                    name={"payedWithCash"}
+                                    onChange={(e) => handlePaymentChange("Efectivo", e.target.value)}
+                                />
+                            </div>
+                        )
+                    }
+                    {
+                        paymentsMethods["Transferencia"] && (
+                             <div>
+                                <p>Cantidad pagada con transferencia</p>
+                                <InputBasic
+                                    type={"Number"}
+                                    placeholder={"$0-$20.000"}
+                                    name={"payedWithTransfer"}
+                                    onChange={(e) => handlePaymentChange("Transferencia", e.target.value)}
+                                />
+                            </div>
+                        )
+                    }
                 </div>
 
                 <div className="Button-register-container">
