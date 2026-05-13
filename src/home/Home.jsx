@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faBox, faX } from '@fortawesome/free-solid-svg-icons';
-import alertDesicion from '../utils/alertDesicion';
+import alertDesicion from '../lib/utils/alertDesicion.js';
 
 export default function Home({ userName = 'user' }) {
 

@@ -46,7 +46,6 @@ export default function ProductListCard({name, img}){
             <div className=" flex gap-4 items-center min-w-fit">
                 <AdminButton 
                     text={'Eliminar'}
-                    onClick={handleDelete}
                 />
                 
                 <Link to={'/admin/editProduct'}>
