@@ -1,61 +1,67 @@
-import { Link } from "react-router";
-import AdminButton from "../../shared/components/AdminButton";
-import alertDesicion from "../../lib/utils/alertDesicion";
-import alertPop from "../../lib/utils/alertPop.js";
+import { useEffect, useState } from 'react';
+import ProductListCard from './ProductListCard';
+import { getProducts } from '../../lib/services/products.js';
+import { desactiveProduct } from '../../lib/services/products.js';
+import Swal from 'sweetalert2';
 
-export default function ProductListCard({name, img}){
+export default function ProductList() {
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    //BACKEND: toca poner la logica de eliminar un producto
-    //FRONTEND: conectar el editar con su respectiva vista
-    const handleDelete = async () =>{
-        const result = await alertDesicion(
-            '¿DESEA ELIMINAR ESTE PRODUCTO?',
-            'Presione confirmar para completar proceso',
-            'info',
-            'Eliminar',
-            'Cancelar'
-        )
-        if(result.isConfirmed){
-            try {
-                await alertPop(
-                    'PRODUCTO ELIMINADO CON EXITO', 
-                    'Proceso realizado con exito', 
-                    'success', 
-                    'Continuar'
-                )
-            } catch (error) {
-                await alertPop(
-                    'NO SE PUDO ELIMINAR EL PRODUCTO', 
-                    'No se pudo terminar el proceso', 
-                    'error', 
-                    'Continuar'
-                )
+    // Cargar productos al iniciar
+    useEffect(() => {
+        const fetchProducts = async () => {
+            setLoading(true);
+            const result = await getProducts();
+            if (result.success) {
+                setProducts(result.data);
+            }
+            setLoading(false);
+        };
+        fetchProducts();
+    }, []);
+
+    const handleDelete = async (id, name) => {
+        const result = await Swal.fire({
+            title: '¿DESEA ELIMINAR ESTE PRODUCTO?',
+            text: name,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (result.isConfirmed) {
+            const deleteResult = await desactiveProduct(id);
+            
+            if (deleteResult.success) {
+                Swal.fire('Éxito', 'Producto desactivado', 'success');
+                // Actualizar lista
+                setProducts(products.filter(p => p.id_producto !== id));
+            } else {
+                Swal.fire('Error', deleteResult.error, 'error');
             }
         }
+    };
 
+    if (loading) {
+        return <div className='text-center py-10'>Cargando productos...</div>;
     }
 
-    return(
-        <section className="flex flex-row items-center justify-between py-5 px-6 w-full border-b border-gray-200 last:border-none">
-
-            <div className="flex flex-row items-center gap-4 text-xl text-gray-800 font-semibold">
-                <img  className='aspect-square w-16 h-16 object-cover rounded-lg shadow-sm'src={img} alt={name} />
-                <p>{name}</p>
-            </div>
-            
-            <div className=" flex gap-4 items-center min-w-fit">
-                <AdminButton 
-                    text={'Eliminar'}
-                    onClick={handleDelete}
-                />
-                
-                <Link to={'/admin/editProduct'}>
-                    <AdminButton 
-                        text={'Actualizar'}
-                    />
-                </Link>
-
-            </div>
+    return (
+        <section className='bg-gray-100 rounded-3xl w-full flex flex-col justify-center'>
+            <ul className='list-none list-outside'>
+                {products.map((product) => (
+                    <li key={product.id_producto} className='m-0 p-0'>
+                        <ProductListCard 
+                            id={product.id_producto}
+                            name={product.nombre_producto}
+                            img={product.imagen_producto}
+                            onDelete={() => handleDelete(product.id_producto, product.nombre_producto)}
+                        />
+                    </li>
+                ))}
+            </ul>
         </section>
-    )
+    );
 }

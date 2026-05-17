@@ -1,6 +1,5 @@
-import {supabase} from "../supabase/client.js";
-
 import supabase from "../supabase/client";
+
 
 export const createPayment = async (datosPago) => {
     try {
@@ -223,3 +222,43 @@ export const getPaymentsByDateRange = async (fechaInicio, fechaFin) => {
     }
 };
 
+export const getPaymentsSummaryToday = async () => {
+    try {
+        const today = new Date();
+        const inicioDelDia = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString();
+        const finDelDia = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1).toISOString();
+
+        const { data, error } = await supabase
+            .from("pagos")
+            .select(`
+                monto,
+                metodos_pago(id_metodo, nombre_metodo)
+            `)
+            .gte("fecha_pago", inicioDelDia)
+            .lt("fecha_pago", finDelDia);
+
+        if (error) throw error;
+
+        // Agrupar por método de pago
+        const resumen = {};
+        data.forEach(pago => {
+            const nombreMetodo = pago.metodos_pago.nombre_metodo;
+            if (!resumen[nombreMetodo]) {
+                resumen[nombreMetodo] = 0;
+            }
+            resumen[nombreMetodo] += pago.monto;
+        });
+
+        return {
+            success: true,
+            data: resumen
+        };
+
+    } catch (error) {
+        console.error("Error al obtener resumen de pagos:", error);
+        return {
+            success: false,
+            error: error.message || "Error al obtener el resumen"
+        };
+    }
+};

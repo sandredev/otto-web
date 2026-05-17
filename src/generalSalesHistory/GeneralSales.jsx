@@ -1,10 +1,70 @@
+import { useState, useEffect } from 'react';
 import { Link } from "react-router";
-import Table from "@/shared/table/Table";
+import SalesTable from "../sales/components/SalesTable.jsx";
 import ottoLogo from '@/assets/otto-logo.png';
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getAllSales, getSaleDetails } from '@/lib/services/ventas.js';
+import ReceiptModal from "../sales/components/ReceiptModal.jsx";
+import Swal from 'sweetalert2';
 
 export default function GeneralSales(){
+    const [sales, setSales] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [ventaDetalle, setVentaDetalle] = useState(null);
+
+    useEffect(() => {
+        const cargarVentas = async () => {
+            setLoading(true);
+            const result = await getAllSales();
+
+            if (result.success && result.data) {
+                const ventasFormateadas = result.data.map(venta => ({
+                    id_venta: venta.id_venta,
+                    empleado: venta.usuarios?.nombre_completo || 'N/A',
+                    cliente: venta.id_cliente || 'Cliente anónimo',
+                    subtotal: venta.subtotal.toLocaleString('es-CO'),
+                    descuento: venta.descuento.toLocaleString('es-CO'),
+                    total: venta.total.toLocaleString('es-CO'),
+                    fecha: new Date(venta.fecha_venta).toLocaleDateString('es-CO', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    }),
+                    estado: venta.estado_venta ? '✓ Completada' : '✗ Cancelada'
+                }));
+                setSales(ventasFormateadas);
+            } else {
+                Swal.fire('Error', result.error, 'error');
+            }
+            setLoading(false);
+        };
+
+        cargarVentas();
+    }, []);
+
+    const handleVerRecibo = async (idVenta) => {
+        setLoading(true);
+        const result = await getSaleDetails(idVenta);
+        setLoading(false);
+
+        if (result.success) {
+            setVentaDetalle(result.data);
+        } else {
+            Swal.fire('Error', result.error, 'error');
+        }
+    };
+
+    if (loading) {
+        return (
+            <section className="min-h-screen flex items-center justify-center">
+                <p className='text-xl text-gray-600'>Cargando historial...</p>
+            </section>
+        );
+    }
+
     return(
         <section className="min-h-screen">
 
@@ -19,19 +79,35 @@ export default function GeneralSales(){
                 Historial
             </header>
 
-            
             <div className="p-8">
-                <div className=" flex flex-row text-4xl font-black text-black tracking-tighter text-left mb-6">
-                    <h1>Historial de ventas historico</h1>
+                <div className="flex flex-row text-4xl font-black text-black tracking-tighter text-left mb-6">
+                    <h1>Historial de ventas histórico</h1>
                 </div>
 
                 <div className="flex items-center justify-start w-full h-full">
-                    <Table rowData={[]}/>
+                    {sales.length === 0 ? (
+                        <div className="bg-white rounded-lg shadow-lg p-8 text-center w-full">
+                            <h2 className='text-2xl font-bold text-gray-800 mb-4'>No hay ventas</h2>
+                            <p className='text-gray-600'>No se han registrado ventas en el sistema</p>
+                        </div>
+                    ) : (
+                        <SalesTable 
+                            rowData={sales}
+                            onVerRecibo={handleVerRecibo}
+                        />
+                    )}
                 </div>
             </div>
 
+            {ventaDetalle && (
+                <ReceiptModal 
+                    venta={ventaDetalle}
+                    onClose={() => setVentaDetalle(null)}
+                />
+            )}
+
             <div
-                className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  w-full h-full bg-no-repeat bg-center opacity-10 pointer-events-none"
+                className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-no-repeat bg-center opacity-10 pointer-events-none"
                 style={{
                     backgroundImage: `url(${ottoLogo})`,
                     backgroundSize: 'calc(20vw + 20vh)'

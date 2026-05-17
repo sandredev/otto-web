@@ -1,6 +1,61 @@
+
+
 import { Link } from 'react-router';
+import { useState } from 'react';
+import { useAuth } from '../lib/hooks/useAuth.js';
+import Swal from 'sweetalert2';
 
 export default function Login() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [setp, setStep] = useState(1); 
+    const [codigo, setCodigo] = useState('');
+    const {loginStep1, loginStep2, loading} = useAuth();
+    const navigate = useNavigate();
+
+        const handleStep1 = async (e) => {
+        e.preventDefault();
+
+        if (!email || !password) {
+            Swal.fire('Error', 'Por favor completa todos los campos', 'error');
+            return;
+        }
+
+        const result = await loginStep1(email, password);
+
+        if (result.success) {
+            setStep(2);
+            Swal.fire('Éxito', 'Se envió un código a tu email', 'success');
+        } else {
+            Swal.fire('Error', result.error, 'error');
+        }
+    };
+
+    const handleStep2 = async (e) => {
+        e.preventDefault();
+
+        if (!codigo) {
+            Swal.fire('Error', 'Ingresa el código temporal', 'error');
+            return;
+        }
+
+        const result = await loginStep2(email, codigo);
+
+        if (result.success) {
+            Swal.fire('Éxito', 'Login exitoso', 'success');
+            navigate('/home');
+        } else {
+            Swal.fire('Error', result.error, 'error');
+        }
+    };
+
+    const handleVolver = () => {
+        setStep(1);
+        setCodigo('');
+    };
+
+    
+
     return (
         <section className='bg-white rounded-[3rem] shadow-2xl px-2 py-6 sm:py-7 md:py-10 lg:py-14 w-full grid max-w-2xl gap-3 
                                         items-center text-[clamp(0.6rem,calc(1vw+1vh),1rem)] max-md:landscape:py-3 justify-self-center'>

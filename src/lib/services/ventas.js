@@ -2,7 +2,69 @@ import { data } from "react-router";
 import supabase from "../supabase/client";
 import {calculateTotal} from "../utils/funciones.js";
 
+export const registrarVentaCompleta = async (datosVenta, detalles, pagos) => {
+    try {
+        // 1. Crear la venta
+        const { data: ventaData, error: ventaError } = await supabase
+            .from("ventas")
+            .insert([{
+                id_empleado: datosVenta.id_empleado,
+                id_cliente: datosVenta.id_cliente || null,
+                subtotal: datosVenta.subtotal,
+                descuento: datosVenta.descuento,
+                total: datosVenta.total,
+                notas: datosVenta.notas || null,
+                estado_venta: true
+            }])
+            .select();
 
+        if (ventaError) throw ventaError;
+
+        const id_venta = ventaData[0].id_venta;
+
+        // 2. Agregar detalles de la venta
+        const detallesFormateados = detalles.map(detalle => ({
+            id_venta: id_venta,
+            id_producto: detalle.id_producto,
+            cantidad: detalle.cantidad,
+            precio_unitario: detalle.precio_unitario,
+            subtotal: detalle.subtotal
+        }));
+
+        const { error: detallesError } = await supabase
+            .from("detalles_venta")
+            .insert(detallesFormateados);
+
+        if (detallesError) throw detallesError;
+
+        // 3. Agregar pagos
+        const pagosFormateados = pagos.map(pago => ({
+            id_venta: id_venta,
+            id_metodo_pago: pago.id_metodo_pago,
+            monto: pago.monto,
+            fecha_pago: new Date().toISOString()
+        }));
+
+        const { error: pagosError } = await supabase
+            .from("pagos")
+            .insert(pagosFormateados);
+
+        if (pagosError) throw pagosError;
+
+        return {
+            success: true,
+            data: { id_venta, ...ventaData[0] },
+            message: "Venta registrada exitosamente"
+        };
+
+    } catch (error) {
+        console.error("Error al registrar venta:", error);
+        return {
+            success: false,
+            error: error.message || "Error al registrar la venta"
+        };
+    }
+};
 
 export const createSale = async (datosVenta) => {
     try {
@@ -280,3 +342,92 @@ export const getSalesByEmployee = async (idEmpleado, includeCompleted = true) =>
         };
     }
 };
+
+
+export const getSalesToday = async () => {
+    try {
+        const today = new Date();
+        const inicioDelDia= new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString();
+        const finDelDia = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1).toISOString();
+
+        const { data, error }   = await supabase
+        .from("ventas")
+        .select(`
+                *,
+                usuarios(nombre_completo, nombre_usuario),
+                detalles_venta(
+                    cantidad,
+                    precio_unitario,
+                    subtotal,
+                    productos(nombre_producto)
+                )
+            `)
+        .gte("fecha_venta", inicioDelDia)
+        .lt("fecha_venta", finDelDia)
+        .eq("estado_venta", true)
+        .order("fecha_venta", { ascending: false });
+
+        if (error) throw error;
+
+        return {
+            success: true,
+            data: data,
+            count: data.length
+        };
+    } catch (error) {
+        console.error("Error al obtener ventas del día:", error);
+        return {
+            success: false,
+            error: error.message || "Error al obtener ventas del día"
+        };
+    }
+};
+
+
+export const getSaleDetails = async (idVenta) => {
+    try {
+        if (!idVenta) {
+            return {
+                success: false,
+                error: "El ID de la venta es requerido"
+            };
+        }
+
+        const { data, error } = await supabase
+            .from("ventas")
+            .select(`
+                *,
+                usuarios(nombre_completo, nombre_usuario),
+                detalles_venta(
+                    id_detalle,
+                    cantidad,
+                    precio_unitario,
+                    subtotal,
+                    productos(nombre_producto, imagen_producto)
+                ),
+                pagos(
+                    id_pago,
+                    monto,
+                    fecha_pago,
+                    metodos_pago(nombre_metodo)
+                )
+            `)
+            .eq("id_venta", idVenta)
+            .single();
+
+        if (error) throw error;
+
+        return {
+            success: true,
+            data: data
+        };
+
+    } catch (error) {
+        console.error("Error al obtener detalles de venta:", error);
+        return {
+            success: false,
+            error: error.message || "Error al obtener los detalles"
+        };
+    }
+};
+

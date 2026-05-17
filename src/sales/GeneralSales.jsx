@@ -1,4 +1,6 @@
 import Table from "@/shared/Table/Table";
+import { faCog } from '@fortawesome/free-solid-svg-icons';
+
 
 export default function GeneralSales() {
     return (

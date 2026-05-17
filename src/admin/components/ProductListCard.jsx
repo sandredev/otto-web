@@ -3,13 +3,13 @@ import AdminButton from "../../shared/components/AdminButton";
 import alertDesicion from "../../utils/alertDesicion";
 import alertPop from "../../utils/alertPop";
 
-export default function ProductListCard({name, img}){
+export default function ProductListCard({id, name, img}){
+    
+    
 
-    //BACKEND: toca poner la logica de eliminar un producto
-    //FRONTEND: conectar el editar con su respectiva vista
     const handleDelete = async () =>{
         const result = await alertDesicion(
-            '¿DESEA ELIMINAR ESTE PRODUCTO?',
+            '¿DESEA DESACTIVAR ESTE PRODUCTO?',
             'Presione confirmar para completar proceso',
             'info',
             'Eliminar',

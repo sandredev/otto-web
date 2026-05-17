@@ -5,8 +5,8 @@ import {
     markTokenAsUsed 
 } from "../services/token.js";
 
-// ============ PASO 1: LOGIN - Email + Contraseña ============
-export const loginStep1 = async (email, password) => {
+
+/*export const loginStep1 = async (email, password) => {
     try {
         if (!email || !password) {
             return {
@@ -23,11 +23,15 @@ export const loginStep1 = async (email, password) => {
 
         if (authError) throw authError;
 
-        // Buscar usuario en tabla usuarios (SIN .single())
+       
         const { data: userData, error: userError } = await supabase
             .from("usuarios")
             .select("*, roles(nombre_rol, permisos)")
-            .eq("email", email);
+            .eq("email", email).single();
+
+        console.log("Email buscado:", email);
+console.log("userData:", userData);
+console.log("userError:", userError);
 
         if (userError && userError.code !== 'PGRST116') {
             throw userError;
@@ -42,22 +46,10 @@ export const loginStep1 = async (email, password) => {
             };
         }
 
-        const user = userData[0];
-
-        // Validar si está verificado
-        if (user.codigo_verificado === false) {
-            await supabase.auth.signOut();
-            return {
-                success: false,
-                error: "Cuenta no verificada. Revisa tu email para el código de verificación.",
-                requiresVerification: true,
-                email: email
-            };
-        }
-
+        
         // Generar y enviar código temporal para 2FA
         const codeResult = await generateAndSendTemporaryCode(email);
-
+        console.log("Respuesta de Resend:", emailResult);
         if (!codeResult.success) {
             await supabase.auth.signOut();
             return {
@@ -81,7 +73,61 @@ export const loginStep1 = async (email, password) => {
         };
     }
 };
+*/
 
+export const loginStep1 = async (emailOrUsername, password) => {
+    try {
+        if (!emailOrUsername || !password) {
+            return {
+                success: false,
+                error: "Email/Usuario y contraseña son requeridos"
+            };
+        }
+
+        const { data: userData, error: userError } = await supabase
+            .from("usuarios")
+            .select("*, roles(nombre_rol, permisos)")
+            .or(`email.eq.${emailOrUsername},nombre_usuario.eq.${emailOrUsername}`);
+
+        if (userError) throw userError;
+
+        if (!userData || userData.length === 0) {
+            return {
+                success: false,
+                error: "Usuario no encontrado"
+            };
+        }
+
+        const user = userData[0];
+
+        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+            email: user.email,
+            password: password
+        });
+
+        if (authError) throw authError;
+
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+
+        if (sessionError) throw sessionError;
+
+        return {
+            success: true,
+            user: sessionData.session?.user,
+            userData: user,
+            session: sessionData.session,
+            esAdmin: user.id_rol === 1,
+            message: "Login exitoso"
+        };
+
+    } catch (error) {
+        console.error("Error en loginStep1:", error);
+        return {
+            success: false,
+            error: error.message || "Error en el login"
+        };
+    }
+};
 // ============ PASO 2: LOGIN - Verificar Código Temporal (2FA) ============
 export const loginStep2 = async (email, codigoTemporal) => {
     try {

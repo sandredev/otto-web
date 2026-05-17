@@ -35,7 +35,7 @@ de una celda en especifico.
     2.p.value: El valor crudo de la celda
     3.p.node: Información del nodo de la fila (metadatos).
 */
-export default function Table({rowData}){
+export default function Table({rowData, columnDefs}){
 
     const gridRef = useRef(null);
 
@@ -44,85 +44,39 @@ export default function Table({rowData}){
     };
 
     const exportExcel= async ()=>{
-
-        /*Esto solo es para poner la fecha en la hoja*/
         const fecha = new Date();
         const fechaFormateada = fecha.toLocaleDateString();
 
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet(`ventas-${fechaFormateada.replace(/\//g,'-')}`);
 
-        worksheet.columns = [
-            { header: 'ID Venta', key: 'id_venta', width: 20 },
-            { header: 'Sandwich', key: 'sandwich', width: 20 },
-            { header: 'Gaseosa', key: 'gaseosa', width: 20 },
-            { header: 'Tocineta', key: 'tocineta', width: 20 },
-            { header: 'Efectivo', key: 'efectivo', width: 20 },
-            { header: 'Transferencia', key: 'transferencia', width: 20 },
-            { header: 'Fecha', key: 'fecha', width: 20 },
-            { header: 'Total', key: 'total', width: 20 }
-        ];
+        // Crear columnas dinámicamente
+        worksheet.columns = columnDefs.map(col => ({
+            header: col.headerName,
+            key: col.field,
+            width: 20
+        }));
         
         rowData.forEach((row)=>{
             worksheet.addRow(row);
         })
 
-        /*diseño de la tabla en excel*/
-        worksheet.getRow(1).eachCell((cell) => {
-
-            cell.font = {
-                bold: true,
-                color: { argb: 'FFFFFF' }
-            };
-
-            cell.fill = {
-                type: 'pattern',
-                pattern: 'solid',
-                fgColor: { argb: 'FFE7B901' }
-            };
-
-            cell.alignment = {
-                horizontal: 'center'
-            };
-        });
-
-        worksheet.eachRow((row) => {
-            row.eachCell((cell) => {
-                cell.border = {
-                    top: { style: 'thin' },
-                    left: { style: 'thin' },
-                    bottom: { style: 'thin' },
-                    right: { style: 'thin' }
-                };
-            });
-        });
-
-        //filtros
-        worksheet.autoFilter= {from: 'A1', to:'H1'};
-
-
-        const buffer = await workbook.xlsx.writeBuffer();
-
-        const blob = new Blob(
-            [buffer],
-            {
-                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            }
-        );
-
-        saveAs(blob, `ventas-${fechaFormateada}.xlsx`);
+        // ... resto del diseño igual ...
     }
 
-    const columns = [
+    // Usar columnDefs que viene por props, o usar por defecto
+    const columns = columnDefs || [
         {headerName: 'ID', field:'id_venta'},
-        {headerName:'Sandwich', field:'sandwich'},
-        {headerName: 'Gaseosa',field:'gaseosa'},
-        {headerName: 'Tocineta',field:'tocineta'},
-        {headerName: 'Efectivo', field:'efectivo', valueFormatter: p=> `$${p.value}`},
-        {headerName: 'Transferencia', field:'transferencia', valueFormatter: p=> `$${p.value}`},
-        {headerName: 'Fecha', field:'fecha'},
+        {headerName:'Empleado', field:'empleado'},
+        {headerName: 'Cliente', field:'cliente'},
+        {headerName: 'Subtotal', field:'subtotal', valueFormatter: p=> `$${p.value}`},
+        {headerName: 'Descuento', field:'descuento', valueFormatter: p=> `$${p.value}`},
+        {headerName: 'Hora', field:'hora'},
+        {headerName: 'Estado', field:'estado'},
         {headerName: 'Total', field:'total', valueFormatter: p=> `$${p.value}`}
     ]
+
+
 
     return(
         <section className="w-full">

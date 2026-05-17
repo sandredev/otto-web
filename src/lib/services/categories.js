@@ -89,14 +89,14 @@ export const getAllCategories = async (includeInactive= false) => {
         if (error) throw error;
 
         return {   
-            sucess: true,
+            success: true,
             data: data,
             count: data.length
         };
     } catch (error) {
         console.error("Error al obtener las categorías:", error);
         return {
-            sucess: false,
+            success: false,
             error: error.message || "Error al obtener las categorías."
         };
     }   

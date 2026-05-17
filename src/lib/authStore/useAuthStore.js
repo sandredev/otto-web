@@ -8,7 +8,7 @@ export const useAuthStore = create(
             userData: null,
             session: null, 
             esAdmin: false,
-            usAuthenticated: false,
+            isAuthenticated: false,
             loading: false,
             error: null,
 
@@ -18,7 +18,7 @@ export const useAuthStore = create(
                     userData: Userdata,
                     session: session,
                     esAdmin: esAdmin,
-                    usAuthenticated: true,
+                    isAuthenticated: true,
                     error: null
                 }),
             
@@ -30,7 +30,7 @@ export const useAuthStore = create(
                     userData: null,
                     session: null,
                     esAdmin: false,
-                    usAuthenticated: false,
+                    isAuthenticated: false,
                     loading: false,
                     error: null
                 }),

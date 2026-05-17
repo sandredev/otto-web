@@ -1,52 +1,129 @@
-import Table from "@/shared/table/Table";
+import { useState, useEffect } from 'react';
+import Table from '../../shared/Table/Table';
+import { getSalesToday, getSaleDetails } from '@/lib/services/ventas.js';
+import ReceiptModal from '../components/ReceiptModal';
+import Swal from 'sweetalert2';
 
-export default function diarySales(){
-    /*Esto solo es de prueba*/
-    const sales = [
-        {
-            id_venta: 1,
-            sandwich: 'Hamburguesa',
-            gaseosa: 'Coca Cola',
-            tocineta: true,
-            efectivo: 25000,
-            transferencia: 0,
-            fecha: '2026-05-07',
-            total: 25000
-        },
-        {
-            id_venta: 2,
-            sandwich: 'Perro Caliente',
-            gaseosa: 'Pepsi',
-            tocineta: false,
-            efectivo: 0,
-            transferencia: 18000,
-            fecha: '2026-05-07',
-            total: 18000
-        }
-    ];
-    /*Esto solo es de prueba*/
+export default function DiarySales(){
+    const [sales, setSales] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [ventaSeleccionada, setVentaSeleccionada] = useState(null);
+    const [ventaDetalle, setVentaDetalle] = useState(null);
 
-    
     const fecha = new Date();
     const fechaFormateada = fecha.toLocaleDateString('es-CO', {
         year: 'numeric',
         month: 'long',
         weekday: 'long',
         day: 'numeric'
-    })
+    });
+
+    useEffect(() => {
+        const cargarVentas = async () => {
+            setLoading(true);
+            const result = await getSalesToday();
+
+            if (result.success && result.data) {
+                const ventasFormateadas = result.data.map(venta => ({
+                    id_venta: venta.id_venta,
+                    empleado: venta.usuarios?.nombre_completo || 'N/A',
+                    cliente: venta.id_cliente || 'Cliente anónimo',
+                    subtotal: venta.subtotal.toLocaleString('es-CO'),
+                    descuento: venta.descuento.toLocaleString('es-CO'),
+                    total: venta.total.toLocaleString('es-CO'),
+                    hora: new Date(venta.fecha_venta).toLocaleTimeString('es-CO', { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                    }),
+                    estado: venta.estado_venta ? '✓ Completada' : '✗ Cancelada',
+                    // Guardar objeto original para el modal
+                    _original: venta
+                }));
+                setSales(ventasFormateadas);
+            } else {
+                Swal.fire('Error', result.error, 'error');
+            }
+            setLoading(false);
+        };
+
+        cargarVentas();
+    }, []);
+
+    // Manejar click en fila para ver recibo
+    const handleVerRecibo = async (idVenta) => {
+        setLoading(true);
+        const result = await getSaleDetails(idVenta);
+        setLoading(false);
+
+        if (result.success) {
+            setVentaDetalle(result.data);
+        } else {
+            Swal.fire('Error', result.error, 'error');
+        }
+    };
+
+    if (loading && sales.length === 0) {
+        return (
+            <section className="bg-[--color-graywhite] min-h-full p-8 flex items-center justify-center">
+                <p className='text-xl text-gray-600'>Cargando ventas del día...</p>
+            </section>
+        );
+    }
+
+    if (sales.length === 0) {
+        return (
+            <section className="bg-[--color-graywhite] min-h-full p-8">
+                <div className="flex flex-row text-4xl font-black text-black tracking-tighter text-left mb-6">
+                    <h1>{`Ventas del ${fechaFormateada}`}</h1>
+                </div>
+                <div className="bg-white rounded-lg shadow-lg p-8 text-center">
+                    <h2 className='text-2xl font-bold text-gray-800 mb-4'>No hay ventas</h2>
+                    <p className='text-gray-600'>No se han registrado ventas para hoy</p>
+                </div>
+            </section>
+        );
+    }
 
     return(
         <section className="bg-[--color-graywhite] min-h-full p-8">
-
-            <div className=" flex flex-row text-4xl font-black text-black tracking-tighter text-left mb-6">
+            <div className="flex flex-row text-4xl font-black text-black tracking-tighter text-left mb-6">
                 <h1>{`Ventas del ${fechaFormateada}`}</h1>
             </div>
 
-            <div className="flex items-center justify-start w-full h-full">
-                <Table
+            <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <Table 
                     rowData={sales}
+                    columnDefs={[
+                        {
+                            headerName: 'ID', 
+                            field:'id_venta',
+                            cellRenderer: (params) => (
+                                <button
+                                    onClick={() => handleVerRecibo(params.value)}
+                                    className='text-blue-600 hover:text-blue-800 font-bold hover:underline'
+                                >
+                                    Ver #{params.value}
+                                </button>
+                            )
+                        },
+                        {headerName:'Empleado', field:'empleado'},
+                        {headerName: 'Cliente', field:'cliente'},
+                        {headerName: 'Subtotal', field:'subtotal'},
+                        {headerName: 'Descuento', field:'descuento'},
+                        {headerName: 'Hora', field:'hora'},
+                        {headerName: 'Estado', field:'estado'},
+                        {headerName: 'Total', field:'total'}
+                    ]}
                 />
             </div>
+
+            {/* Modal del Recibo */}
+            {ventaDetalle && (
+                <ReceiptModal 
+                    venta={ventaDetalle}
+                    onClose={() => setVentaDetalle(null)}
+                />
+            )}
         </section>
     )
 }
