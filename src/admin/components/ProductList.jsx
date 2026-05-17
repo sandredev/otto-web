@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import ProductListCard from './ProductListCard';
 import { getProducts } from '../../lib/services/products.js';
-import { desactiveProduct } from '../../lib/services/products.js';
+import { deactivateProduct } from '../../lib/services/products.js';
 import Swal from 'sweetalert2';
 
 export default function ProductList() {

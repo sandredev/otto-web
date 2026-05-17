@@ -40,13 +40,12 @@ export default function AppRouter() {
                             <AdminView />
                         </ProtectedRoute>
                     }>
-                        <Route path='editProduct' element={<EditProduct />} />
                     </Route>
                 </Route>
                 
-                <Route path='admin/editProduct/:productId' element={
+                <Route path='sales/admin/editProduct/:productId' element={
                     <ProtectedRoute requiredRole='admin'>
-                        <Product />
+                        <EditProduct />
                     </ProtectedRoute>
                 } />
                 

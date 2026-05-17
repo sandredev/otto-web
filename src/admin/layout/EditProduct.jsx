@@ -1,32 +1,69 @@
-
-
-import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router';
+import { useState, useRef, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import PrimaryButton from '../../shared/components/PrimaryButton.jsx';
-import InputBasic from '../../shared/components/InputBasic.jsx';
+import PrimaryButton from '@/shared/components/PrimaryButton.jsx';
+import InputBasic from '@/shared/components/InputBasic.jsx';
 import Swal from 'sweetalert2';
-import { updateProduct } from '../../lib/services/products.js';
-import { uploadImageToCloudinary } from '../../lib/services/cloudinary/cloudinary.js';
+import { updateProduct, getProductById } from '../../lib/services/products.js';
+import { uploadImageToCloudinary, validateImage } from '../../lib/services/cloudinary/cloudinary.js';
 
-export default function EditProduct({ product }) {
+export default function EditProduct() {
+    const { productId } = useParams();
     const [file, setFile] = useState(null);
-    const [productName, setProductName] = useState(product?.nombre_producto || '');
-    const [price, setPrice] = useState(product?.precio_producto || '');
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [producto, setProducto] = useState(null);
     const inputRef = useRef(null);
     const navigate = useNavigate();
+
+    const [formData, setFormData] = useState({
+        nombre_producto: '',
+        precio: '',
+        descripcion: ''
+    });
+
+    // Cargar producto al montar
+    useEffect(() => {
+        const cargarProducto = async () => {
+            const result = await getProductById(productId);
+            if (result.success) {
+                setProducto(result.data);
+                setFormData({
+                    nombre_producto: result.data.nombre_producto,
+                    precio: result.data.precio,
+                    descripcion: result.data.descripcion || ''
+                });
+            } else {
+                Swal.fire('Error', result.error, 'error');
+                navigate('/sales/admin');
+            }
+            setLoading(false);
+        };
+        cargarProducto();
+    }, [productId, navigate]);
 
     const clickEvent = () => {
         inputRef.current.click();
     };
 
-    const handleFiles = (e) => {
+    const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         if (selectedFile) {
+            const validation = validateImage(selectedFile);
+            if (!validation.success) {
+                Swal.fire('Error', validation.error, 'error');
+                return;
+            }
             setFile(selectedFile);
         }
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
     };
 
     const handleSubmit = async (e) => {
@@ -34,34 +71,29 @@ export default function EditProduct({ product }) {
         setLoading(true);
 
         try {
-            if (!productName || !price) {
-                Swal.fire('Error', 'Por favor completa todos los campos', 'error');
+            if (!formData.nombre_producto || !formData.precio) {
+                Swal.fire('Error', 'Nombre y precio son requeridos', 'error');
                 setLoading(false);
                 return;
             }
 
-            let imageUrl = product?.imagen_producto;
+            let imagenUrl = producto?.imagen_producto;
 
-            // Si hay archivo, subirlo a Cloudinary
+            // Si hay archivo nuevo, subirlo a Cloudinary
             if (file) {
-                const formData = new FormData();
-                formData.append('file', file);
-                formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
-
-                const cloudinaryResult = await uploadImageCloudinary(formData);
-
-                if (!cloudinaryResult.success) {
-                    throw new Error(cloudinaryResult.error);
+                const uploadResult = await uploadImageToCloudinary(file);
+                if (!uploadResult.success) {
+                    throw new Error(uploadResult.error);
                 }
-
-                imageUrl = cloudinaryResult.imageUrl;
+                imagenUrl = uploadResult.url;
             }
 
             // Actualizar producto en BD
-            const result = await updateProduct(product.id_producto, {
-                nombre_producto: productName,
-                precio_producto: parseFloat(price),
-                imagen_producto: imageUrl
+            const result = await updateProduct(producto.id_producto, {
+                nombre_producto: formData.nombre_producto,
+                precio: parseFloat(formData.precio),
+                descripcion: formData.descripcion,
+                imagen_producto: imagenUrl
             });
 
             if (result.success) {
@@ -79,95 +111,127 @@ export default function EditProduct({ product }) {
     };
 
     const handleVolver = () => {
-        navigate('/sales/admin');
+        navigate(-1);
     };
 
+    if (loading) {
+        return <div className='text-center py-10'>Cargando producto...</div>;
+    }
+
+    if (!producto) {
+        return <div className='text-center py-10'>Producto no encontrado</div>;
+    }
+
     return (
-        <section className="mb-10 h-screen relative">
-            
+        <section className="mb-10 min-h-screen p-8">
             <button 
                 type='button'
                 onClick={handleVolver}
-                className="absolute top-6 left-6 text-white p-2 hover:opacity-80 transition-all"
+                className="mb-6 text-gray-700 p-2 hover:text-gray-900 transition-all inline-flex items-center gap-2"
             >
-                <span className="inline-block transition-transform duration-300 hover:-translate-x-1">
-                    <FontAwesomeIcon icon={faArrowLeft} size="lg" />
-                </span>
+                <FontAwesomeIcon icon={faArrowLeft} size="lg" />
+                <span>Volver</span>
             </button>
 
             <h1 className='font-bold text-3xl text-left mb-6 tracking-tighter text-gray-900'>
                 Editar producto
             </h1>
 
-            <form onSubmit={handleSubmit} className='flex flex-col gap-6 bg-gray-100 rounded-2xl px-30 p-8 max-w-4xl'>
+            <form onSubmit={handleSubmit} className='flex flex-col gap-6 bg-white rounded-2xl p-8 max-w-2xl shadow-lg'>
                 
-                <section className='flex flex-col items-center justify-center w-full bg-white border-2 border-dashed border-gray-300 rounded-xl p-4 hover:border-yellow-500 transition-colors'>
+                {/* Imagen */}
+                <section className='flex flex-col items-center justify-center w-full bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl p-6 hover:border-yellow-500 transition-colors'>
                     {file ? (
                         <img 
                             src={URL.createObjectURL(file)}
                             alt="Preview" 
-                            className='w-40 h-40 object-cover rounded-lg mb-4 shadow-sm'
+                            className='w-48 h-48 object-cover rounded-lg mb-4 shadow-sm'
                         />
                     ) : (
                         <img 
-                            src={product?.imagen_producto || 'https://via.placeholder.com/160'} 
-                            alt={product?.nombre_producto} 
-                            className='w-40 h-40 object-cover rounded-lg mb-4 shadow-sm'
+                            src={producto?.imagen_producto || 'https://via.placeholder.com/160'} 
+                            alt={producto?.nombre_producto} 
+                            className='w-48 h-48 object-cover rounded-lg mb-4 shadow-sm'
                         />
                     )}
 
                     <input 
                         type="file" 
                         ref={inputRef} 
-                        onChange={handleFiles} 
-                        accept="image/*"
+                        onChange={handleFileChange} 
+                        accept="image/jpeg,image/png,image/gif"
                         className='hidden'
                     />
 
                     <PrimaryButton 
-                        text={'Actualizar foto'} 
+                        text={file ? 'Cambiar foto' : 'Actualizar foto'} 
                         type={'button'} 
                         onClick={clickEvent}
                     />
                 </section>
 
+                {/* Nombre y Precio */}
                 <section className='grid grid-cols-1 md:grid-cols-2 gap-6 w-full'>
                     <div className='flex gap-2 flex-col'>
-                        <label htmlFor="productName" className='text-sm font-medium text-gray-700 ml-1'>
+                        <label htmlFor="nombre_producto" className='text-sm font-medium text-gray-700'>
                             Nombre del producto
                         </label>
                         <InputBasic
                             type={'text'}
-                            placeholder={'Ingrese nombre del producto'} 
-                            name={'productName'}
-                            id={'productName'}
-                            value={productName}
-                            onChange={(e) => setProductName(e.target.value)}
+                            placeholder={'Ej: Sándwich de Pollo'} 
+                            name={'nombre_producto'}
+                            id={'nombre_producto'}
+                            value={formData.nombre_producto}
+                            onChange={handleInputChange}
                         />                    
                     </div>
 
                     <div className='flex gap-2 flex-col'>
-                        <label htmlFor="price" className='text-sm font-medium text-gray-700 ml-1'>
+                        <label htmlFor="precio" className='text-sm font-medium text-gray-700'>
                             Precio del producto
                         </label>
                         <InputBasic 
                             type={'number'}
-                            placeholder={'Ingrese el precio del producto'} 
-                            name={'price'}
-                            id={'price'}
-                            value={price}
-                            onChange={(e) => setPrice(e.target.value)}
+                            placeholder={'Ej: 15000'} 
+                            name={'precio'}
+                            id={'precio'}
+                            value={formData.precio}
+                            onChange={handleInputChange}
                             step="0.01"
+                            min="0"
                         />
                     </div>
                 </section>
 
+                {/* Descripción */}
+                <div className='flex gap-2 flex-col'>
+                    <label htmlFor="descripcion" className='text-sm font-medium text-gray-700'>
+                        Descripción (opcional)
+                    </label>
+                    <textarea
+                        name="descripcion"
+                        id="descripcion"
+                        value={formData.descripcion}
+                        onChange={handleInputChange}
+                        placeholder='Descripción del producto'
+                        className='border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 resize-none h-20'
+                    />
+                </div>
+
+                {/* Botones */}
                 <section className='flex justify-between w-full gap-5 items-center'>
                     <PrimaryButton 
                         type={'submit'} 
-                        text={loading ? 'Actualizando...' : 'Actualizar producto'}
+                        text={loading ? 'Guardando...' : 'Actualizar producto'}
                         disabled={loading}
                     />
+                    <button
+                        type='button'
+                        onClick={handleVolver}
+                        className='px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 font-medium'
+                    >
+                        Cancelar
+                    </button>
                 </section>
             </form>
         </section>

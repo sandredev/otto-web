@@ -48,7 +48,7 @@ export default function ProductListCard({id, name, img}){
                     text={'Eliminar'}
                 />
                 
-                <Link to={'/admin/editProduct'}>
+                <Link to={'editProduct/' + id}>
                     <AdminButton 
                         text={'Actualizar'}
                     />

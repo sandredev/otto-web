@@ -1,61 +1,74 @@
+import { useState, useEffect } from 'react';
+import { useNavigate} from 'react-router';
 import ProductManagement from './layout/ProductManagement.jsx';
 import AddProduct from './layout/AddProduct.jsx';
 import { Link } from 'react-router';
 import PrimaryButton from '../shared/components/PrimaryButton.jsx';
+import { getProducts } from '../lib/services/products.js';
+import Swal from 'sweetalert2';
 
 export default function AdminView(){
+    const [productos, setProductos] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
-const productList = [
-  {
-    id: 1,
-    name: "Sándwich de Pollo Crispy",
-    img: "https://images.pexels.com/photos/1600711/pexels-photo-1600711.jpeg?auto=compress&cs=tinysrgb&w=500"
-  },
-  {
-    id: 2,
-    name: "Sándwich Club Triple",
-    img: "https://images.pexels.com/photos/1603901/pexels-photo-1603901.jpeg?auto=compress&cs=tinysrgb&w=500"
-  },
-  {
-    id: 3,
-    name: "Sándwich de Roast Beef",
-    img: "https://images.pexels.com/photos/1633525/pexels-photo-1633525.jpeg?auto=compress&cs=tinysrgb&w=500"
-  },
-  {
-    id: 4,
-    name: "Grilled Cheese Clásico",
-    img: "https://images.pexels.com/photos/3219483/pexels-photo-3219483.jpeg?auto=compress&cs=tinysrgb&w=500"
-  },
-  {
-    id: 5,
-    name: "Subway de Vegetales",
-    img: "https://images.pexels.com/photos/461382/pexels-photo-461382.jpeg?auto=compress&cs=tinysrgb&w=500"
-  }
-];
+    useEffect(() => {
+        cargarProductos();
+    }, []);
 
-  return(
-    <section className='w-full max-w-175 m-auto'>
-
-      <div className="font-black text-4xl text-black text-left tracking-tighter mb-8">
-        <h1>Manejo de la plataforma</h1>                    
-      </div>
-
-      <div className='flex justify-center items-center gap-3 w-full my-8'>
-
-        <Link to={'/sales/history'} className='w-full'>
-          <PrimaryButton type={'button'} text={'Ventas Del día'}/>
-        </Link>
+    const cargarProductos = async () => {
+        setLoading(true);
+        const result = await getProducts(true); // true = incluir inactivos
         
-        <Link to={'/generalHistory'} className='w-full'>
-          <PrimaryButton type={'button'} text={'Historial de ventas'}/>
-        </Link>
-      </div>
+        if (result.success) {
+            // Mapear datos al formato esperado
+            const productosFormateados = result.data.map(prod => ({
+                id_producto: prod.id_producto,
+                nombre_producto: prod.nombre_producto,
+                precio: prod.precio,
+                imagen_producto: prod.imagen_producto,
+                estado: prod.estado
+            }));
+            setProductos(productosFormateados);
+        } else {
+            Swal.fire('Error', result.error, 'error');
+        }
+        setLoading(false);
+    };
 
-      <div className=' flex flex-col gap-12'>
-        <AddProduct/>
-        <ProductManagement products={productList}/>
-      </div>
+   const handleEditarProducto = (id) => {
+    navigate(`/editProduct/${id}`);
+};
 
-    </section>
-  )
+    if (loading) {
+        return <div className='text-center py-10'>Cargando productos...</div>;
+    }
+
+    return(
+        <section className='w-full max-w-175 m-auto'>
+
+            <div className="font-black text-4xl text-black text-left tracking-tighter mb-8">
+                <h1>Manejo de la plataforma</h1>                    
+            </div>
+
+            <div className='flex justify-center items-center gap-3 w-full my-8'>
+                <Link to={'/sales/history'} className='w-full'>
+                    <PrimaryButton type={'button'} text={'Ventas Del día'}/>
+                </Link>
+                
+                <Link to={'/generalHistory'} className='w-full'>
+                    <PrimaryButton type={'button'} text={'Historial de ventas'}/>
+                </Link>
+            </div>
+
+            <div className='flex flex-col gap-12'>
+                <AddProduct onProductoAgregado={cargarProductos} />
+                <ProductManagement 
+                    products={productos}
+                    onEditarProducto={handleEditarProducto}
+                    onProductosActualizados={cargarProductos}
+                />
+            </div>
+        </section>
+    )
 }
