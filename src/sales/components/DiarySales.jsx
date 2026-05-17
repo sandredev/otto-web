@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import Table from '../../shared/Table/Table';
+import Table from '../../shared/table/Table';
 import { getSalesToday, getSaleDetails } from '@/lib/services/ventas.js';
 import ReceiptModal from '../components/ReceiptModal';
 import Swal from 'sweetalert2';
 
-export default function DiarySales(){
+export default function DiarySales() {
     const [sales, setSales] = useState([]);
     const [loading, setLoading] = useState(true);
     const [ventaSeleccionada, setVentaSeleccionada] = useState(null);
@@ -31,9 +31,9 @@ export default function DiarySales(){
                     subtotal: venta.subtotal.toLocaleString('es-CO'),
                     descuento: venta.descuento.toLocaleString('es-CO'),
                     total: venta.total.toLocaleString('es-CO'),
-                    hora: new Date(venta.fecha_venta).toLocaleTimeString('es-CO', { 
-                        hour: '2-digit', 
-                        minute: '2-digit' 
+                    hora: new Date(venta.fecha_venta).toLocaleTimeString('es-CO', {
+                        hour: '2-digit',
+                        minute: '2-digit'
                     }),
                     estado: venta.estado_venta ? '✓ Completada' : '✗ Cancelada',
                     // Guardar objeto original para el modal
@@ -84,19 +84,19 @@ export default function DiarySales(){
         );
     }
 
-    return(
+    return (
         <section className="bg-[--color-graywhite] min-h-full p-8">
             <div className="flex flex-row text-4xl font-black text-black tracking-tighter text-left mb-6">
                 <h1>{`Ventas del ${fechaFormateada}`}</h1>
             </div>
 
             <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-                <Table 
+                <Table
                     rowData={sales}
                     columnDefs={[
                         {
-                            headerName: 'ID', 
-                            field:'id_venta',
+                            headerName: 'ID',
+                            field: 'id_venta',
                             cellRenderer: (params) => (
                                 <button
                                     onClick={() => handleVerRecibo(params.value)}
@@ -106,20 +106,20 @@ export default function DiarySales(){
                                 </button>
                             )
                         },
-                        {headerName:'Empleado', field:'empleado'},
-                        {headerName: 'Cliente', field:'cliente'},
-                        {headerName: 'Subtotal', field:'subtotal'},
-                        {headerName: 'Descuento', field:'descuento'},
-                        {headerName: 'Hora', field:'hora'},
-                        {headerName: 'Estado', field:'estado'},
-                        {headerName: 'Total', field:'total'}
+                        { headerName: 'Empleado', field: 'empleado' },
+                        { headerName: 'Cliente', field: 'cliente' },
+                        { headerName: 'Subtotal', field: 'subtotal' },
+                        { headerName: 'Descuento', field: 'descuento' },
+                        { headerName: 'Hora', field: 'hora' },
+                        { headerName: 'Estado', field: 'estado' },
+                        { headerName: 'Total', field: 'total' }
                     ]}
                 />
             </div>
 
             {/* Modal del Recibo */}
             {ventaDetalle && (
-                <ReceiptModal 
+                <ReceiptModal
                     venta={ventaDetalle}
                     onClose={() => setVentaDetalle(null)}
                 />
