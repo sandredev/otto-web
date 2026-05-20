@@ -98,7 +98,12 @@ export default function Login() {
                         </button>
                     </Link>
                 </form>
-            <p className='text-gray-400'>¿Usuario nuevo? <Link to='register'><span className='text-yellow-otto underline cursor-pointer'>Crea un nuevo usuario aquí</span></Link></p>
+            {
+                /*<p className='text-gray-400'>¿Usuario nuevo? <Link to='register'>
+                <span className='text-yellow-otto underline cursor-pointer'>Crea un nuevo usuario aquí</span>
+                </Link></p>*/
+            }
+            
             </div>
         </section>
         );
