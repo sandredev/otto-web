@@ -85,12 +85,13 @@ export default function Auth() {
                                 {loading ? 'Cargando...' : 'Iniciar sesión'}
                             </button>
                         </form>
+                        {/* 
                         <p className='text-gray-400'>
                             ¿Usuario nuevo? 
                             <Link to='/registro' className='text-yellow-otto underline cursor-pointer ml-1'>
                                 Crea un nuevo usuario aquí
                             </Link>
-                        </p>
+                        </p>*/}
                     </div>
                 </section>
             </div>
