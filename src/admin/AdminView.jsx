@@ -47,7 +47,7 @@ export default function AdminView(){
     return(
         <section className='w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
 
-            <div className="font-black text-2xl sm:text-3xl lg:text-4xl text-black text-left tracking-tighter mb-6 sm:mb-8">
+            <div className="font-black text-xl sm:text-2xl lg:text-3xl text-black text-left tracking-tighter mb-6 sm:mb-8">
                 <h1>Manejo de la plataforma</h1>                    
             </div>
 

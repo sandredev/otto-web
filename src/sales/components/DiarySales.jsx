@@ -73,12 +73,12 @@ export default function DiarySales() {
     if (sales.length === 0) {
         return (
             <section className="bg-[--color-graywhite] min-h-full p-8">
-                <div className="flex flex-row text-4xl font-black text-black tracking-tighter text-left mb-6">
+                <div className="flex flex-row text-2xl sm:text-3xl lg:text-4xl font-black text-black tracking-tighter text-left mb-6">
                     <h1>{`Ventas del ${fechaFormateada}`}</h1>
                 </div>
                 <div className="bg-white rounded-lg shadow-lg p-8 text-center">
-                    <h2 className='text-2xl font-bold text-gray-800 mb-4'>No hay ventas</h2>
-                    <p className='text-gray-600'>No se han registrado ventas para hoy</p>
+                    <h2 className='text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 mb-4'>No hay ventas</h2>
+                    <p className='text-sm sm:text-base text-gray-600'>No se han registrado ventas para hoy</p>
                 </div>
             </section>
         );
@@ -86,7 +86,7 @@ export default function DiarySales() {
 
     return (
         <section className="bg-[--color-graywhite] min-h-full p-8">
-            <div className="flex flex-row text-4xl font-black text-black tracking-tighter text-left mb-6">
+            <div className="flex flex-row text-2xl sm:text-3xl lg:text-4xl font-black text-black tracking-tighter text-left mb-6">
                 <h1>{`Ventas del ${fechaFormateada}`}</h1>
             </div>
 

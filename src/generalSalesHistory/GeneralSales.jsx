@@ -102,7 +102,7 @@ export default function GeneralSales(){
             </header>
 
             <div className="p-8">
-                <div className="flex flex-row text-4xl font-black text-black tracking-tighter text-left mb-6">
+                <div className="flex flex-row text-2xl sm:text-3xl lg:text-4xl font-black text-black tracking-tighter text-left mb-6">
                     <h1>Historial de ventas histórico</h1>
                 </div>
 

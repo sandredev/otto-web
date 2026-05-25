@@ -4,7 +4,7 @@ export default function ProductManagement({products}){
     return(
         <section className="flex flex-col justify-center items-start ">
 
-            <div className="text-3xl text-black mb-6 font-bold tracking-tighter text-left">
+            <div className="text-lg sm:text-xl lg:text-2xl text-black mb-6 font-bold tracking-tighter text-left">
                 <h1>Editar productos</h1>
             </div>
 

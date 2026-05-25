@@ -59,7 +59,8 @@ export default function SalesLayout() {
                         grid-rows-[10dvh_90dvh]
                         max-lg:[grid-template-areas:'header'_'main']
                         max-lg:grid-cols-1
-                        max-lg:grid-rows-[10dvh_1fr]">
+                        max-lg:grid-rows-[10dvh_1fr]
+                        min-h-dvh">
             <header className="[grid-area:header] bg-yellow-otto-light flex items-center justify-center h-[10dvh] max-lg:landscape:h-14
                             text-[clamp(1.2rem,3vw,1.8rem)] text-shadow-md font-bold text-white sticky top-0 z-50 border-b border-b-amber-50 relative">
                 <button

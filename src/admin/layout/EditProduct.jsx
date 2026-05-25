@@ -123,7 +123,7 @@ export default function EditProduct() {
     }
 
     return (
-        <section className="mb-10 min-h-screen p-8">
+        <section className="mb-10 min-h-screen p-4 sm:p-8">
             <button 
                 type='button'
                 onClick={handleVolver}
@@ -133,11 +133,11 @@ export default function EditProduct() {
                 <span>Volver</span>
             </button>
 
-            <h1 className='font-bold text-3xl text-left mb-6 tracking-tighter text-gray-900'>
+            <h1 className='font-bold text-xl sm:text-2xl lg:text-3xl text-left mb-6 tracking-tighter text-gray-900'>
                 Editar producto
             </h1>
 
-            <form onSubmit={handleSubmit} className='flex flex-col gap-6 bg-white rounded-2xl p-8 max-w-2xl shadow-lg'>
+            <form onSubmit={handleSubmit} className='flex flex-col gap-6 bg-white rounded-2xl p-4 sm:p-6 lg:p-8 max-w-2xl shadow-lg'>
                 
                 {/* Imagen */}
                 <section className='flex flex-col items-center justify-center w-full bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl p-6 hover:border-yellow-500 transition-colors'>
@@ -145,13 +145,13 @@ export default function EditProduct() {
                         <img 
                             src={URL.createObjectURL(file)}
                             alt="Preview" 
-                            className='w-48 h-48 object-cover rounded-lg mb-4 shadow-sm'
+                            className='w-32 h-32 sm:w-48 sm:h-48 object-cover rounded-lg mb-4 shadow-sm'
                         />
                     ) : (
                         <img 
                             src={producto?.imagen_producto || 'https://via.placeholder.com/160'} 
                             alt={producto?.nombre_producto} 
-                            className='w-48 h-48 object-cover rounded-lg mb-4 shadow-sm'
+                            className='w-32 h-32 sm:w-48 sm:h-48 object-cover rounded-lg mb-4 shadow-sm'
                         />
                     )}
 
@@ -214,12 +214,12 @@ export default function EditProduct() {
                         value={formData.descripcion}
                         onChange={handleInputChange}
                         placeholder='Descripción del producto'
-                        className='border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 resize-none h-20'
+                        className='border border-gray-300 rounded-md px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-yellow-500 resize-none h-20'
                     />
                 </div>
 
                 {/* Botones */}
-                <section className='flex justify-between w-full gap-5 items-center'>
+                <section className='flex flex-col sm:flex-row justify-between w-full gap-5 items-center'>
                     <PrimaryButton 
                         type={'submit'} 
                         text={loading ? 'Guardando...' : 'Actualizar producto'}
@@ -228,7 +228,7 @@ export default function EditProduct() {
                     <button
                         type='button'
                         onClick={handleVolver}
-                        className='cursor-pointer px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 font-medium'
+                        className='cursor-pointer w-full sm:w-auto px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 font-medium'
                     >
                         Cancelar
                     </button>

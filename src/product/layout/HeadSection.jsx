@@ -21,7 +21,7 @@ export default function HeadSection({img,productName}){
             />
         </div>
 
-        <h1 className='text-4xl font-black uppercase text-white tracking-tighter text-center'>
+        <h1 className='text-2xl sm:text-3xl lg:text-4xl font-black uppercase text-white tracking-tighter text-center'>
             {productName}
         </h1>
     </section>

@@ -23,7 +23,7 @@ export default function Sidebar({ className, size = 'md', activeBorder = 'left' 
         : `border-l-4 ${size === 'md' ? 'sm:border-l-6' : ''} border-l-graywhite`;
 
     const linkClass = ({ isActive }) =>
-        `flex items-center ${isRow ? 'flex-row gap-x-3 w-full px-4 py-2' : 'flex-col gap-y-3 w-fullx py-2'}
+        `flex items-center ${isRow ? 'flex-row gap-x-3 w-full px-4 py-2' : 'flex-col gap-y-3 w-full py-2'}
         ${isActive ? activeBorderClass + ' bg-white/10' : 'hover:bg-white/40'}
         transition-all`;
 

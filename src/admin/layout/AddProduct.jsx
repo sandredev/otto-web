@@ -147,7 +147,7 @@ export default function AddProduct(){
 
     return(
         <section className='mb-10'>
-            <h1 className='font-bold text-2xl sm:text-3xl text-left mb-6 tracking-tighter text-gray-900'>Añadir producto</h1>
+            <h1 className='font-bold text-lg sm:text-xl lg:text-2xl text-left mb-6 tracking-tighter text-gray-900'>Añadir producto</h1>
             <form ref={FormRef} onSubmit={handleSubmit} className='flex flex-col gap-6 bg-gray-100 rounded-2xl px-4 sm:px-8 lg:px-12 xl:px-30 p-6 sm:p-8'>
 
                 {/* Imagen */}
@@ -217,7 +217,7 @@ export default function AddProduct(){
                             id="id_categoria"
                             value={formData.id_categoria}
                             onChange={handleInputChange}
-                            className='cursor-pointer border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500'
+                            className='cursor-pointer border border-gray-300 rounded-md px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-yellow-500'
                         >
                             <option value="">Selecciona una categoría</option>
                             {categorias.map(cat => (
@@ -254,7 +254,7 @@ export default function AddProduct(){
                         placeholder={'Ej: Pan, pollo, lechuga, tomate, mayonesa'}
                         value={formData.ingredientes}
                         onChange={handleInputChange}
-                        className='border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 resize-none h-20'
+                        className='border border-gray-300 rounded-md px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-yellow-500 resize-none h-20'
                     />
                 </div>
 
