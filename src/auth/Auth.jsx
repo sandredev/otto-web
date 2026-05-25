@@ -21,7 +21,7 @@ export default function Auth() {
         const result = await loginStep1(emailOrUsername, password);
 
         if (result.success) {
-            Swal.fire('Éxito', 'Login exitoso', 'success').then(() => {
+            Swal.fire('Éxito', 'Inicio de sesión exitoso', 'success').then(() => {
         navigate('/sales');
     });
         } else {

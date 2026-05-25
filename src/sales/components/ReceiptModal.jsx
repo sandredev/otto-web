@@ -22,7 +22,7 @@ export default function ReceiptModal({ venta, onClose }) {
                     <h2 className='text-2xl font-bold'>Recibo de Venta</h2>
                     <button
                         onClick={onClose}
-                        className='text-white hover:bg-yellow-600 p-2 rounded'
+                        className='cursor-pointer text-white hover:bg-yellow-600 p-2 rounded'
                     >
                         <FontAwesomeIcon icon={faTimes} size='lg' />
                     </button>
@@ -146,13 +146,13 @@ export default function ReceiptModal({ venta, onClose }) {
                 <div className='bg-gray-100 p-6 border-t flex gap-4'>
                     <button
                         onClick={onClose}
-                        className='flex-1 bg-gray-500 text-white font-bold py-2 rounded-lg hover:bg-gray-600'
+                        className='cursor-pointer flex-1 bg-gray-500 text-white font-bold py-2 rounded-lg hover:bg-gray-600'
                     >
                         Cerrar
                     </button>
                     <button
                         onClick={() => window.print()}
-                        className='flex-1 bg-yellow-otto text-white font-bold py-2 rounded-lg hover:brightness-95'
+                        className='cursor-pointer flex-1 bg-yellow-otto text-white font-bold py-2 rounded-lg hover:brightness-95'
                     >
                         Imprimir
                     </button>

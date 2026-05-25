@@ -148,7 +148,7 @@ export default function ShoppingCart({ carrito, onAumentar, onDisminuir, onElimi
                                 </div>
                                 <button
                                     onClick={() => onEliminar(item.id)}
-                                    className='text-red-500 hover:text-red-700'
+                                    className='cursor-pointer text-red-500 hover:text-red-700'
                                 >
                                     <FontAwesomeIcon icon={faTrash} size='sm' />
                                 </button>
@@ -158,7 +158,7 @@ export default function ShoppingCart({ carrito, onAumentar, onDisminuir, onElimi
                                 <div className='flex items-center gap-2'>
                                     <button
                                         onClick={() => onDisminuir(item.id)}
-                                        className='bg-yellow-otto text-white p-1 rounded hover:brightness-95'
+                                        className='cursor-pointer bg-yellow-otto text-white p-1 rounded hover:brightness-95'
                                     >
                                         <FontAwesomeIcon icon={faMinus} size='xs' />
                                     </button>
@@ -167,7 +167,7 @@ export default function ShoppingCart({ carrito, onAumentar, onDisminuir, onElimi
                                     </span>
                                     <button
                                         onClick={() => onAumentar(item.id)}
-                                        className='bg-yellow-otto text-white p-1 rounded hover:brightness-95'
+                                        className='cursor-pointer bg-yellow-otto text-white p-1 rounded hover:brightness-95'
                                     >
                                         <FontAwesomeIcon icon={faPlus} size='xs' />
                                     </button>
@@ -190,7 +190,17 @@ export default function ShoppingCart({ carrito, onAumentar, onDisminuir, onElimi
                     <input
                         type='number'
                         value={descuento}
-                        onChange={(e) => setDescuento(Math.max(0, parseFloat(e.target.value) || 0))}
+                        onChange={(e) => {
+                            const value = e.target.value;
+
+                            if (value === '') {
+                                setDescuento('');
+                                return;
+                            }
+
+                            setDescuento(Math.max(0, parseFloat(value) || 0));
+                        }}
+                        placeholder='0'
                         className='w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm'
                         min='0'
                         max={subtotal}
@@ -228,7 +238,7 @@ export default function ShoppingCart({ carrito, onAumentar, onDisminuir, onElimi
                         <select
                             value={metodoPagoTemp}
                             onChange={(e) => setMetodoPagoTemp(e.target.value)}
-                            className='w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500'
+                            className='cursor-pointer w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500'
                         >
                             <option value="">Selecciona método de pago</option>
                             {metodosPago.map(metodo => (
@@ -249,7 +259,7 @@ export default function ShoppingCart({ carrito, onAumentar, onDisminuir, onElimi
 
                         <button
                             onClick={agregarPago}
-                            className='w-full bg-yellow-otto text-white py-1 rounded text-sm font-semibold hover:brightness-95'
+                            className='cursor-pointer w-full bg-yellow-otto text-white py-1 rounded text-sm font-semibold hover:brightness-95'
                         >
                             Agregar Pago
                         </button>
@@ -273,7 +283,7 @@ export default function ShoppingCart({ carrito, onAumentar, onDisminuir, onElimi
                                     </div>
                                     <button
                                         onClick={() => eliminarPago(pago.id)}
-                                        className='text-red-500 hover:text-red-700'
+                                        className='cursor-pointer text-red-500 hover:text-red-700'
                                     >
                                         <FontAwesomeIcon icon={faTrash} size='sm' />
                                     </button>
@@ -300,7 +310,7 @@ export default function ShoppingCart({ carrito, onAumentar, onDisminuir, onElimi
             <button
                 onClick={handleRegistrarVenta}
                 disabled={carrito.length === 0 || pendiente > 0 || loading}
-                className='w-full bg-yellow-otto text-white font-bold py-3 rounded-lg hover:brightness-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all'
+                className='cursor-pointer w-full bg-yellow-otto text-white font-bold py-3 rounded-lg hover:brightness-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all'
             >
                 {loading 
                     ? 'Registrando...' 

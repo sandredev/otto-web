@@ -127,7 +127,7 @@ export default function EditProduct() {
             <button 
                 type='button'
                 onClick={handleVolver}
-                className="mb-6 text-gray-700 p-2 hover:text-gray-900 transition-all inline-flex items-center gap-2"
+                className="cursor-pointer mb-6 text-gray-700 p-2 hover:text-gray-900 transition-all inline-flex items-center gap-2"
             >
                 <FontAwesomeIcon icon={faArrowLeft} size="lg" />
                 <span>Volver</span>
@@ -228,7 +228,7 @@ export default function EditProduct() {
                     <button
                         type='button'
                         onClick={handleVolver}
-                        className='px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 font-medium'
+                        className='cursor-pointer px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 font-medium'
                     >
                         Cancelar
                     </button>

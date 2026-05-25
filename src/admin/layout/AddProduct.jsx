@@ -147,8 +147,8 @@ export default function AddProduct(){
 
     return(
         <section className='mb-10'>
-            <h1 className='font-bold text-3xl text-left mb-6 tracking-tighter text-gray-900'>Añadir producto</h1>
-            <form ref={FormRef} onSubmit={handleSubmit} className='flex flex-col gap-6 bg-gray-100 rounded-2xl px-30 p-8'>
+            <h1 className='font-bold text-2xl sm:text-3xl text-left mb-6 tracking-tighter text-gray-900'>Añadir producto</h1>
+            <form ref={FormRef} onSubmit={handleSubmit} className='flex flex-col gap-6 bg-gray-100 rounded-2xl px-4 sm:px-8 lg:px-12 xl:px-30 p-6 sm:p-8'>
 
                 {/* Imagen */}
                 <div className='flex flex-col items-center justify-center w-full bg-white border-2 border-dashed border-gray-300 rounded-xl p-4 hover:border-yellow-500 transition-colors'>
@@ -217,7 +217,7 @@ export default function AddProduct(){
                             id="id_categoria"
                             value={formData.id_categoria}
                             onChange={handleInputChange}
-                            className='border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500'
+                            className='cursor-pointer border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500'
                         >
                             <option value="">Selecciona una categoría</option>
                             {categorias.map(cat => (
@@ -259,7 +259,7 @@ export default function AddProduct(){
                 </div>
 
                 {/* Botones */}
-                <section className='flex justify-between w-full gap-5 items-center'>
+                <section className='flex flex-col sm:flex-row w-full gap-3 sm:gap-5 items-stretch sm:items-center'>
                     <PrimaryButton 
                         type={'submit'} 
                         text={loading ? 'Guardando...' : 'Ingresar nuevo producto'}

@@ -6,7 +6,7 @@ export default function AdminButton({text, onClick}){
         <button
             type={'button'}
             onClick={onClick}
-            className={`${bgColor} text-white font-medium rounded-md py-3 px-6 hover:brightness-95 transition-all`}
+            className={`cursor-pointer ${bgColor} text-white font-medium rounded-md py-3 px-6 hover:brightness-95 transition-all`}
         >
             {text}
         </button>

@@ -1,6 +1,6 @@
 import Table from "@/shared/table/Table";
 
-export default function SalesTable({rowData, onVerRecibo}){
+export default function SalesTable({rowData, onVerRecibo, onEliminarRegistro}){
     const columnDefs = [
         {
             headerName: 'ID', 
@@ -8,7 +8,7 @@ export default function SalesTable({rowData, onVerRecibo}){
             cellRenderer: (params) => (
                 <button
                     onClick={() => onVerRecibo(params.value)}
-                    className='text-blue-600 hover:text-blue-800 font-bold hover:underline'
+                    className='cursor-pointer text-blue-600 hover:text-blue-800 font-bold hover:underline'
                 >
                     Ver #{params.value}
                 </button>
@@ -23,5 +23,5 @@ export default function SalesTable({rowData, onVerRecibo}){
         {headerName: 'Total', field:'total'}
     ];
 
-    return <Table rowData={rowData} columnDefs={columnDefs} />;
+    return <Table rowData={rowData} columnDefs={columnDefs} onEliminarRegistro={onEliminarRegistro} />;
 }

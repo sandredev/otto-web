@@ -32,7 +32,7 @@ export default function ProductList() {
         });
 
         if (result.isConfirmed) {
-            const deleteResult = await desactiveProduct(id);
+            const deleteResult = await deactivateProduct(id);
             
             if (deleteResult.success) {
                 Swal.fire('Éxito', 'Producto desactivado', 'success');

@@ -230,7 +230,7 @@ export const cancelSale = async (idVenta) => {
     try {
         if (!idVenta) {
             return {
-                sucess: false,
+                success: false,
                 error: "El id de la venta es requerido para cancelar la venta."
             };
         }
@@ -246,14 +246,14 @@ export const cancelSale = async (idVenta) => {
         }
 
         return {
-            sucess: true,
+            success: true,
             data: data[0],
             message: "Venta cancelada exitosamente."
         };
         } catch (error) {
             console.error("Error al cancelar la venta:", error);
             return {
-                sucess: false,
+                success: false,
                 error: error.message || "Error al cancelar la venta."
             };
         }

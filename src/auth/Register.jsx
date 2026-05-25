@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 
+/*Sin uso temporalmente*/
 export default function Register() {
     return (
         <section className='bg-white rounded-[3rem] shadow-2xl px-2 py-6 sm:py-7 md:py-10 lg:py-14 w-full grid max-w-2xl gap-3 

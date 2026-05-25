@@ -6,7 +6,7 @@ export default function HeadSection({img,productName}){
     return(
     <section className='flex relative flex-col justify-center items-center gap-4 bg-yellow-otto'>
         <Link to={'/sales'}>
-            <button className="absolute top-6 left-6 text-white">
+            <button className="cursor-pointer absolute top-6 left-6 text-white">
                 <span className="inline-block transition-transform duration-300 hover:-translate-x-1 cursor-pointer">
                     <FontAwesomeIcon icon={faArrowLeft} size="2xl"/>
                 </span>

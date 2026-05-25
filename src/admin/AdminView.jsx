@@ -45,18 +45,18 @@ export default function AdminView(){
     }
 
     return(
-        <section className='w-full max-w-175 m-auto'>
+        <section className='w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'>
 
-            <div className="font-black text-4xl text-black text-left tracking-tighter mb-8">
+            <div className="font-black text-2xl sm:text-3xl lg:text-4xl text-black text-left tracking-tighter mb-6 sm:mb-8">
                 <h1>Manejo de la plataforma</h1>                    
             </div>
 
-            <div className='flex justify-center items-center gap-3 w-full my-8'>
-                <Link to={'/sales/history'} className='w-full'>
+            <div className='flex flex-col sm:flex-row justify-center items-stretch sm:items-center gap-3 w-full my-6 sm:my-8'>
+                <Link to={'/sales/history'}>
                     <PrimaryButton type={'button'} text={'Ventas Del día'}/>
                 </Link>
                 
-                <Link to={'/generalHistory'} className='w-full'>
+                <Link to={'/generalHistory'}>
                     <PrimaryButton type={'button'} text={'Historial de ventas'}/>
                 </Link>
             </div>

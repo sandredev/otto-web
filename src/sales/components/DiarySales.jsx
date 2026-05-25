@@ -100,7 +100,7 @@ export default function DiarySales() {
                             cellRenderer: (params) => (
                                 <button
                                     onClick={() => handleVerRecibo(params.value)}
-                                    className='text-blue-600 hover:text-blue-800 font-bold hover:underline'
+                                    className='cursor-pointer text-blue-600 hover:text-blue-800 font-bold hover:underline'
                                 >
                                     Ver #{params.value}
                                 </button>

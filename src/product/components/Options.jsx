@@ -24,7 +24,7 @@ export default function Options({ name, mode = "counter", value, onChange }) {
             <div className="add-container">
                 <button
                     type="button"
-                    className="minus"
+                    className="minus cursor-pointer"
                     onClick={() => onChange(name, Math.max(0, value - 1))}
                 >
                     <FontAwesomeIcon icon={faMinus} />
@@ -34,7 +34,7 @@ export default function Options({ name, mode = "counter", value, onChange }) {
 
                 <button
                     type="button"
-                    className="plus"
+                    className="plus cursor-pointer"
                     onClick={() => onChange(name, value + 1)}
                 >
                     <FontAwesomeIcon icon={faPlus} />

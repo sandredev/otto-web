@@ -104,7 +104,7 @@ export default function RegisterData() {
                         <div className="add-container">
                             <button
                                 type="button"
-                                className="minus"
+                                className="minus cursor-pointer"
                                 onClick={() => setSandwichCount((prev) => (prev > 0 ? prev - 1 : 0))}
                             >
                                 <FontAwesomeIcon icon={faMinus} />
@@ -114,7 +114,7 @@ export default function RegisterData() {
 
                             <button
                                 type="button"
-                                className="plus"
+                                className="plus cursor-pointer"
                                 onClick={() => setSandwichCount((prev) => prev + 1)}
                             >
                                 <FontAwesomeIcon icon={faPlus} />
