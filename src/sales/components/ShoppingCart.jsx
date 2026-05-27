@@ -14,6 +14,11 @@ export default function ShoppingCart({ carrito, onAumentar, onDisminuir, onElimi
     const [montoPagoTemp, setMontoPagoTemp] = useState('');
     const [loading, setLoading] = useState(false);
     const { userData } = useAuth();
+    useEffect(() => {
+        if (carrito.length === 0) return;
+        const total = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+        setMontoPagoTemp(String(total));
+    }, [carrito]);
 
     // Cargar métodos de pago
     useEffect(() => {
