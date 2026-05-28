@@ -2,7 +2,7 @@ import logoOtto from '@/assets/otto-logo.png';
 import { Link, useNavigate } from 'react-router';
 import { useState } from 'react';
 import { useAuth } from '@/lib/hooks/useAuth';
-import Swal from 'sweetalert2';
+import alertPop from '@/utils/alertPop.js';
 
 export default function Auth() {
     const [emailOrUsername, setEmailOrUsername] = useState('');
@@ -14,18 +14,18 @@ export default function Auth() {
         e.preventDefault();
 
         if (!emailOrUsername || !password) {
-            Swal.fire('Error', 'Por favor completa todos los campos', 'error');
+            await alertPop('ERROR', 'Por favor completa todos los campos', 'error', 'Continuar');
             return;
         }
 
         const result = await loginStep1(emailOrUsername, password);
 
         if (result.success) {
-            Swal.fire('Éxito', 'Inicio de sesión exitoso', 'success').then(() => {
+            await alertPop('ÉXITO', 'Inicio de sesión exitoso', 'success', 'Continuar').then(() => {
         navigate('/sales');
     });
         } else {
-            Swal.fire('Error', result.error, 'error');
+            await alertPop('ERROR', result.error, 'error', 'Continuar');
         }
     };
 

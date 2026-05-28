@@ -3,7 +3,7 @@
 import { Link } from 'react-router';
 import { useState } from 'react';
 import { useAuth } from '../lib/hooks/useAuth.js';
-import Swal from 'sweetalert2';
+import alertPop from '@/utils/alertPop.js';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -17,7 +17,12 @@ export default function Login() {
         e.preventDefault();
 
         if (!email || !password) {
-            Swal.fire('Error', 'Por favor completa todos los campos', 'error');
+            await alertPop(
+                'ERROR DE VALIDACIÓN', 
+                'Por favor completa todos los campos', 
+                'error', 
+                'Continuar'
+            );
             return;
         }
 
@@ -25,9 +30,19 @@ export default function Login() {
 
         if (result.success) {
             setStep(2);
-            Swal.fire('Éxito', 'Se envió un código a tu email', 'success');
+            await alertPop(
+                'ÉXITO EN PRIMER PASO', 
+                'Se envió un código a tu email', 
+                'success', 
+                'Continuar'
+            );
         } else {
-            Swal.fire('Error', result.error, 'error');
+            await alertPop(
+                'ERROR DE VALIDACIÓN', 
+                result.error, 
+                'error', 
+                'Continuar'
+            );
         }
     };
 
@@ -35,17 +50,32 @@ export default function Login() {
         e.preventDefault();
 
         if (!codigo) {
-            Swal.fire('Error', 'Ingresa el código temporal', 'error');
+            await alertPop(
+                'ERROR DE VALIDACIÓN', 
+                'Ingresa el código temporal', 
+                'error', 
+                'Continuar'
+            );
             return;
         }
 
         const result = await loginStep2(email, codigo);
 
         if (result.success) {
-            Swal.fire('Éxito', 'Login exitoso', 'success');
+            await alertPop(
+                'ÉXITO', 
+                'Login exitoso', 
+                'success', 
+                'Continuar'
+            );
             navigate('/home');
         } else {
-            Swal.fire('Error', result.error, 'error');
+            await alertPop(
+                'ERROR DE VALIDACIÓN', 
+                result.error, 
+                'error', 
+                'Continuar'
+            );
         }
     };
 

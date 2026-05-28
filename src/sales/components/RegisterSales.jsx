@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router';
 import ProductCard from './ProductCard';
 import { getAvailableProducts} from '../../lib/services/products.js';
-import Swal from 'sweetalert2';
+import alertPop from '@/utils/alertPop.js';
 
 export default function RegisterSales({ isAdmin = false }) {
     const [products, setProducts] = useState([]);
@@ -27,7 +27,7 @@ export default function RegisterSales({ isAdmin = false }) {
                 }));
                 setProducts(productosFormateados);
             } else {
-                Swal.fire('Error', result.error, 'error');
+                await alertPop('ERROR', result.error, 'error', 'Continuar');
             }
             setLoading(false);
         };

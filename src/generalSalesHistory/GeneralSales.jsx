@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from "react-router";
-import SalesTable from "../sales/components/SalesTable.jsx";
 import ottoLogo from '@/assets/otto-logo.png';
+import Table from "../shared/table/Table.jsx";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getAllSales, getSaleDetails, cancelSale } from '@/lib/services/ventas.js';
+import { getAllSales, getSaleDetails } from '@/lib/services/ventas.js';
 import ReceiptModal from "../sales/components/ReceiptModal.jsx";
-import Swal from 'sweetalert2';
+import alertPop from '../utils/alertPop.js';
 
 export default function GeneralSales(){
     const [sales, setSales] = useState([]);
@@ -36,7 +36,12 @@ export default function GeneralSales(){
             }));
             setSales(ventasFormateadas);
         } else {
-            Swal.fire('Error', result.error, 'error');
+            await alertPop(
+                'ERROR AL CARGAR VENTAS', 
+                result.error, 
+                'error', 
+                'Continuar'
+            );
         }
         setLoading(false);
     }, []);
@@ -53,29 +58,11 @@ export default function GeneralSales(){
         if (result.success) {
             setVentaDetalle(result.data);
         } else {
-            Swal.fire('Error', result.error, 'error');
-        }
-    };
-
-    const handleEliminarRegistro = async (row) => {
-        const result = await Swal.fire({
-            title: '¿Cancelar esta venta?',
-            text: `Se cancelará la venta #${row.id_venta}`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, cancelar',
-            cancelButtonText: 'No'
-        });
-
-        if (!result.isConfirmed) return;
-
-        const cancelResult = await cancelSale(row.id_venta);
-
-        if (cancelResult.success) {
-            Swal.fire('Cancelada', 'La venta ha sido cancelada', 'success');
-            cargarVentas();
-        } else {
-            Swal.fire('Error', cancelResult.error || 'No se pudo cancelar la venta', 'error');
+            await alertPop(
+                'ERROR AL CARGAR VENTA', 
+                result.error, 
+                'error', 
+                'Continuar');
         }
     };
 
@@ -91,6 +78,7 @@ export default function GeneralSales(){
         <section className="min-h-screen">
 
             <header className="bg-yellow-otto-light flex items-center justify-center h-[10dvh] text-[clamp(1.2rem,3vw,1.8rem)] text-shadow-md font-bold text-white sticky top-0 z-50 border-b border-b-amber-50">
+
                 <Link to={'/home'} className="absolute left-6">
                     <button className="cursor-pointer">
                         <span className="inline-block transition-transform duration-300 hover:-translate-x-1 cursor-pointer">
@@ -98,10 +86,12 @@ export default function GeneralSales(){
                         </span>
                     </button>
                 </Link>  
+
                 Historial
             </header>
 
-            <div className="p-8">
+            <div className="py-8 px-20">
+            
                 <div className="flex flex-row text-2xl sm:text-3xl lg:text-4xl font-black text-black tracking-tighter text-left mb-6">
                     <h1>Historial de ventas histórico</h1>
                 </div>
@@ -113,10 +103,9 @@ export default function GeneralSales(){
                             <p className='text-gray-600'>No se han registrado ventas en el sistema</p>
                         </div>
                     ) : (
-                        <SalesTable 
+                        <Table 
                             rowData={sales}
                             onVerRecibo={handleVerRecibo}
-                            onEliminarRegistro={handleEliminarRegistro}
                         />
                     )}
                 </div>

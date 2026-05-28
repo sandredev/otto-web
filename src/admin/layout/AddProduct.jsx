@@ -5,7 +5,7 @@ import { useRef, useState, useEffect } from 'react';
 import { uploadImageToCloudinary, validateImage } from '../../lib/services/cloudinary/cloudinary.js';
 import { createProduct } from '../../lib/services/products.js';
 import {getAllCategories} from '../../lib/services/categories.js';
-import Swal from 'sweetalert2';
+import alertPop from '@/utils/alertPop.js';
 
 export default function AddProduct(){
     const FormRef = useRef(null);
@@ -37,7 +37,7 @@ export default function AddProduct(){
                 setCategorias(result.data);
             } else {
                 console.log("3. Error en resultado:", result.error);
-                Swal.fire('Error', 'No se pudieron cargar las categorías', 'error');
+                await alertPop('ERROR', 'No se pudieron cargar las categorías', 'error', 'Continuar');
             }
         } catch (error) {
             console.log("4. Error en try-catch:", error);
@@ -63,13 +63,18 @@ export default function AddProduct(){
         inputRef.current.click();
     };
 
-    const handleFileChange = (e) => {
+    const handleFileChange = async (e) => {
         const filechosen = e.target.files[0];
         
         // Validar imagen
         const validation = validateImage(filechosen);
         if (!validation.success) {
-            Swal.fire('Error', validation.error, 'error');
+            await alertPop(
+                'ERROR', 
+                validation.error, 
+                'error', 
+                'Continuar'
+            );
             return;
         }
         
@@ -93,22 +98,22 @@ export default function AddProduct(){
         
             console.log("FormData antes de validar:", formData);
         if (!formData.nombre_producto) {
-            Swal.fire('Error', 'El nombre del producto es requerido', 'error');
+            await alertPop('ERROR', 'El nombre del producto es requerido', 'error', 'Continuar');
             return;
         }
         
         if (!formData.precio) {
-            Swal.fire('Error', 'El precio es requerido', 'error');
+            await alertPop('ERROR', 'El precio es requerido', 'error', 'Continuar');
             return;
         }
         
         if (!formData.id_categoria) {
-            Swal.fire('Error', 'Selecciona una categoría', 'error');
+            await alertPop('ERROR', 'Selecciona una categoría', 'error', 'Continuar');
             return;
         }
         
         if (!file) {
-            Swal.fire('Error', 'Carga una imagen del producto', 'error');
+            await alertPop('ERROR', 'Carga una imagen del producto', 'error', 'Continuar');
             return;
         }
 
@@ -118,7 +123,7 @@ export default function AddProduct(){
         const uploadResult = await uploadImageToCloudinary(file);
         
         if (!uploadResult.success) {
-            Swal.fire('Error', 'Error al subir la imagen: ' + uploadResult.error, 'error');
+            await alertPop('ERROR', 'Error al subir la imagen: ' + uploadResult.error, 'error', 'Continuar');
             setLoading(false);
             return;
         }
@@ -138,10 +143,10 @@ export default function AddProduct(){
         setLoading(false);
 
         if (createResult.success) {
-            Swal.fire('Éxito', 'Producto creado exitosamente', 'success');
+            await alertPop('ÉXITO', 'Producto creado exitosamente', 'success', 'Continuar');
             ResetForm();
         } else {
-            Swal.fire('Error', createResult.error, 'error');
+            await alertPop('ERROR', createResult.error, 'error', 'Continuar');
         }
     };
 

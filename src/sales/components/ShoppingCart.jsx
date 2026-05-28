@@ -4,7 +4,7 @@ import { faPlus, faMinus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { getAllPaymentMethods } from '@/lib/services/pagos.js';
 import { registrarVentaCompleta } from '@/lib/services/ventas.js';
 import { useAuth } from '../../lib/hooks/useAuth.js';
-import Swal from 'sweetalert2';
+import alertPop from '@/utils/alertPop.js';
 
 export default function ShoppingCart({ carrito, onAumentar, onDisminuir, onEliminar , onRegistroExitoso}) {
     const [descuento, setDescuento] = useState(0);
@@ -41,16 +41,16 @@ export default function ShoppingCart({ carrito, onAumentar, onDisminuir, onElimi
     const pendiente = total - totalPagado;
 
     // Agregar pago
-    const agregarPago = () => {
+    const agregarPago = async () => {
         const monto = parseFloat(montoPagoTemp);
 
         if (!montoPagoTemp || monto <= 0) {
-            Swal.fire('Error', 'Ingresa un monto válido', 'error');
+            await alertPop('ERROR', 'Ingresa un monto válido', 'error', 'Continuar');
             return;
         }
 
         if (monto > pendiente) {
-            Swal.fire('Error', `El monto no puede exceder $${pendiente.toLocaleString('es-CO')}`, 'error');
+            await alertPop('ERROR', `El monto no puede exceder $${pendiente.toLocaleString('es-CO')}`, 'error', 'Continuar');
             return;
         }
 
@@ -76,12 +76,12 @@ export default function ShoppingCart({ carrito, onAumentar, onDisminuir, onElimi
 
     const handleRegistrarVenta = async () => {
         if (carrito.length === 0) {
-            Swal.fire('Error', 'El carrito está vacío', 'error');
+            await alertPop('ERROR', 'El carrito está vacío', 'error', 'Continuar');
             return;
         }
 
         if (pendiente > 0) {
-            Swal.fire('Error', `Falta pagar $${pendiente.toLocaleString('es-CO')}`, 'error');
+            await alertPop('ERROR', `Falta pagar $${pendiente.toLocaleString('es-CO')}`, 'error', 'Continuar');
             return;
         }
 
@@ -113,13 +113,13 @@ export default function ShoppingCart({ carrito, onAumentar, onDisminuir, onElimi
         setLoading(false);
 
         if (result.success) {
-            Swal.fire('Éxito', 'Venta registrada correctamente', 'success');
+            await alertPop('ÉXITO', 'Venta registrada correctamente', 'success');
             // Limpiar
             setPagos([]);
             setDescuento(0);
             onRegistroExitoso();
         } else {
-            Swal.fire('Error', result.error, 'error');
+            await alertPop('ERROR', result.error, 'error');
         }
     };
 

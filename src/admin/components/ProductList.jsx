@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import ProductListCard from './ProductListCard';
 import { getProducts } from '../../lib/services/products.js';
 import { deactivateProduct } from '../../lib/services/products.js';
-import Swal from 'sweetalert2';
+import alertPop from '@/utils/alertPop.js';
+import alertDesicion from '@/utils/alertDesicion.js';
 
 export default function ProductList() {
     const [products, setProducts] = useState([]);
@@ -22,24 +23,33 @@ export default function ProductList() {
     }, []);
 
     const handleDelete = async (id, name) => {
-        const result = await Swal.fire({
-            title: '¿DESEA ELIMINAR ESTE PRODUCTO?',
-            text: name,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Eliminar',
-            cancelButtonText: 'Cancelar'
-        });
+        const result = await alertDesicion(
+            '¿DESEA ELIMINAR ESTE PRODUCTO?', 
+            name, 
+            'question', 
+            'Eliminar', 
+            'Cancelar'
+        );
 
         if (result.isConfirmed) {
             const deleteResult = await deactivateProduct(id);
             
             if (deleteResult.success) {
-                Swal.fire('Éxito', 'Producto desactivado', 'success');
+                await alertPop(
+                    'PRODUCTO DESACTIVADO', 
+                    'Producto desactivado correctamente', 
+                    'success', 
+                    'Continuar'
+                );
                 // Actualizar lista
                 setProducts(products.filter(p => p.id_producto !== id));
             } else {
-                Swal.fire('Error', deleteResult.error, 'error');
+                await alertPop(
+                    'ERROR AL DESACTIVAR', 
+                    deleteResult.error, 
+                    'error', 
+                    'Continuar'
+                );
             }
         }
     };
@@ -50,6 +60,7 @@ export default function ProductList() {
 
     return (
         <section className='bg-gray-100 rounded-3xl w-full flex flex-col justify-center'>
+
             <ul className='list-none list-outside'>
                 {products.map((product) => (
                     <li key={product.id_producto} className='m-0 p-0'>
@@ -62,6 +73,7 @@ export default function ProductList() {
                     </li>
                 ))}
             </ul>
+            
         </section>
     );
 }

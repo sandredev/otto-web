@@ -17,9 +17,9 @@ export default function ProductListCard({id, name, img, onDelete}){
                     onClick={() => onDelete?.()}
                 />
                 
-                <Link to={'editProduct/' + id}>
+                <Link to={`/sales/admin/editProduct/${id}`}>
                     <AdminButton 
-                        text={'Actualizar'}
+                        text={'Editar'}
                     />
                 </Link>
 

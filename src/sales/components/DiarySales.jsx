@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Table from '../../shared/table/Table';
 import { getSalesToday, getSaleDetails } from '@/lib/services/ventas.js';
 import ReceiptModal from '../components/ReceiptModal';
-import Swal from 'sweetalert2';
+import alertPop from '@/utils/alertPop.js';
 
 export default function DiarySales() {
     const [sales, setSales] = useState([]);
@@ -41,7 +41,7 @@ export default function DiarySales() {
                 }));
                 setSales(ventasFormateadas);
             } else {
-                Swal.fire('Error', result.error, 'error');
+                await alertPop('ERROR', result.error, 'error', 'Continuar');
             }
             setLoading(false);
         };
@@ -58,7 +58,7 @@ export default function DiarySales() {
         if (result.success) {
             setVentaDetalle(result.data);
         } else {
-            Swal.fire('Error', result.error, 'error');
+            await alertPop('ERROR', result.error, 'error', 'Continuar');
         }
     };
 

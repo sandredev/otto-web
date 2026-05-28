@@ -53,9 +53,9 @@ export default function RegisterData() {
         try {
             const result = await alertPop(
                 "VENTA EXITOSA",
-                "proceso realizado satisfactoriamente",
+                "Proceso realizado satisfactoriamente",
                 "success",
-                "continuar"
+                "Continuar"
             );
             setSandwichCount(0);
             setAdditionals(initialAdditionals());

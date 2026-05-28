@@ -5,7 +5,7 @@ import AddProduct from './layout/AddProduct.jsx';
 import { Link } from 'react-router';
 import PrimaryButton from '../shared/components/PrimaryButton.jsx';
 import { getProducts } from '../lib/services/products.js';
-import Swal from 'sweetalert2';
+import alertPop from '@/utils/alertPop.js';
 
 export default function AdminView(){
     const [productos, setProductos] = useState([]);
@@ -31,7 +31,11 @@ export default function AdminView(){
             }));
             setProductos(productosFormateados);
         } else {
-            Swal.fire('Error', result.error, 'error');
+            await alertPop(
+                'ERROR AL CARGAR PRODUCTOS', 
+                result.error, 
+                'error', 
+                'Continuar');
         }
         setLoading(false);
     };
