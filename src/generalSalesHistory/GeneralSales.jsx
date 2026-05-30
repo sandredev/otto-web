@@ -106,6 +106,7 @@ export default function GeneralSales(){
                         <Table 
                             rowData={sales}
                             onVerRecibo={handleVerRecibo}
+                            onDelete={cargarVentas}
                         />
                     )}
                 </div>

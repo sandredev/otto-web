@@ -400,6 +400,7 @@ export const getSaleDetails = async (idVenta) => {
                 usuarios(nombre_completo, nombre_usuario),
                 detalles_venta(
                     id_detalle,
+                    id_producto,
                     cantidad,
                     precio_unitario,
                     subtotal,
@@ -431,3 +432,106 @@ export const getSaleDetails = async (idVenta) => {
     }
 };
 
+export const actualizarVentaCompleta = async (idVenta, datosVenta, detalles, pagos) => {
+    try {
+        const { error: ventaError } = await supabase
+            .from('ventas')
+            .update({
+                id_cliente: datosVenta.id_cliente || null,
+                subtotal: datosVenta.subtotal,
+                descuento: datosVenta.descuento,
+                total: datosVenta.total,
+                notas: datosVenta.notas || null
+            })
+            .eq('id_venta', idVenta);
+
+        if (ventaError) throw ventaError;
+
+       
+        const { error: deleteDetallesError } = await supabase
+            .from('detalles_venta')
+            .delete()
+            .eq('id_venta', idVenta);
+
+        if (deleteDetallesError) throw deleteDetallesError;
+
+      
+        const detallesFormateados = detalles.map(detalle => ({
+            id_venta: idVenta,
+            id_producto: detalle.id_producto,
+            cantidad: detalle.cantidad,
+            precio_unitario: detalle.precio_unitario,
+            subtotal: detalle.subtotal
+        }));
+
+        const { error: detallesError } = await supabase
+            .from('detalles_venta')
+            .insert(detallesFormateados);
+
+        if (detallesError) throw detallesError;
+
+        // 4. Borrar pagos anteriores
+        const { error: deletePagosError } = await supabase
+            .from('pagos')
+            .delete()
+            .eq('id_venta', idVenta);
+
+        if (deletePagosError) throw deletePagosError;
+
+        // 5. Insertar nuevos pagos
+        const pagosFormateados = pagos.map(pago => ({
+            id_venta: idVenta,
+            id_metodo_pago: pago.id_metodo_pago,
+            monto: pago.monto,
+            fecha_pago: new Date().toISOString()
+        }));
+
+        const { error: pagosError } = await supabase
+            .from('pagos')
+            .insert(pagosFormateados);
+
+        if (pagosError) throw pagosError;
+
+        return {
+            success: true,
+            message: 'Venta actualizada exitosamente'
+        };
+
+    } catch (error) {
+        console.error('Error al actualizar venta:', error);
+        return {
+            success: false,
+            error: error.message || 'Error al actualizar la venta'
+        };
+    }
+};
+
+export const deleteSale = async (idVenta) => {
+    try {
+        if (!idVenta) {
+            return {
+                success: false,
+                error: 'El ID de la venta es requerido'
+            };
+        }
+
+        const { error } = await supabase
+            .from('ventas')
+            .delete()
+            .eq('id_venta', idVenta);
+
+        if (error) throw error;
+
+        return {
+            success: true,
+            message: 'Venta eliminada correctamente'
+        };
+
+    } catch (error) {
+        console.error('Error al eliminar venta:', error);
+        return {
+            success: false,
+            error: error.message || 'Error al eliminar la venta'
+        };
+    }
+};

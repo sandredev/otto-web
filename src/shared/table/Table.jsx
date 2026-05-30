@@ -9,8 +9,8 @@ import { saveAs } from 'file-saver';
 import alertDesicion from "../../utils/alertDesicion";
 import alertPop from "../../utils/alertPop";
 import { useNavigate } from "react-router";
-
-export default function Table({rowData, onVerRecibo, use='diary'}){
+import { deleteSale } from "../../lib/services/ventas";
+export default function Table({rowData, onVerRecibo,onDelete,  use='diary'}){
 
     const gridRef = useRef(null);
     const navigate = useNavigate();
@@ -19,34 +19,45 @@ export default function Table({rowData, onVerRecibo, use='diary'}){
         use==='diary'?navigate(`/sales/history/editSale`, {state: {registro: p} }):navigate(`/generalhistory/EditSale`, {state: {registro: p} })
     }
 
-    const handleDelete = async (p) => {
-        const result = await alertDesicion(
-            '¿ESTA SEGURO DE ELIMINAR ESTA VENTA?',
-            `Presione confirmar para eliminar ${p.id_venta}`,
-            'question',
-            'Eliminar',
-            'Cancelar'
-        )
+  const handleDelete = async (p) => {
+    const result = await alertDesicion(
+        '¿ESTÁ SEGURO DE ELIMINAR ESTA VENTA?',
+        `Se eliminará permanentemente la venta #${p.id_venta}`,
+        'question',
+        'Eliminar',
+        'Cancelar'
+    );
 
-        if(result.isConfirmed){
-            // Lógica para eliminar la venta
-            try {
+    if (result.isConfirmed) {
+        try {
+            const deleteResult = await deleteSale(p.id_venta);
+
+            if (deleteResult.success) {
                 await alertPop(
                     'VENTA ELIMINADA',
                     'La venta ha sido eliminada correctamente',
                     'success',
                     'Continuar'
-                )
-            } catch (error) {
+                );
+                onDelete && onDelete();
+            } else {
                 await alertPop(
                     'ERROR',
-                    error || 'Ocurrió un error al eliminar la venta',
+                    deleteResult.error,
                     'error',
                     'Continuar'
-                )
+                );
             }
+        } catch (error) {
+            await alertPop(
+                'ERROR',
+                error.message || 'Ocurrió un error al eliminar la venta',
+                'error',
+                'Continuar'
+            );
         }
     }
+};
 
     const columns =[
         {headerName: 'ID', field:'id_venta',
