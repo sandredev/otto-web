@@ -4,6 +4,7 @@ import { getSalesToday, getSaleDetails } from '@/lib/services/ventas.js';
 import ReceiptModal from '../components/ReceiptModal';
 import alertPop from '@/utils/alertPop.js';
 
+
 export default function DiarySales() {
     const [sales, setSales] = useState([]);
     const [loading, setLoading] = useState(true);

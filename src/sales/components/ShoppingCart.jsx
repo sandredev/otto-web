@@ -34,7 +34,7 @@ export default function ShoppingCart({ carrito, onAumentar, onDisminuir, onElimi
         cargarMetodos();
     }, []);
 
-    // Calcular totales
+
     const subtotal = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
     const total = subtotal - descuento;
     const totalPagado = pagos.reduce((sum, pago) => sum + pago.monto, 0);

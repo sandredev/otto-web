@@ -15,7 +15,7 @@ export default function SalesMoney() {
         const result = await getPaymentsSummaryToday();
 
         if (result.success && result.data) {
-            // Buscar los valores por nombre de método
+
             setNequiMoney(result.data['NEQUI'] || result.data['Transferencia'] || 0);
             setCashMoney(result.data['EFECTIVO'] || 0);
         }
@@ -25,7 +25,7 @@ export default function SalesMoney() {
     useEffect(() => {
         fetchSales();
 
-        // ✅ Refrescar cada 30 segundos
+
         const interval = setInterval(fetchSales, 30000);
 
         return () => clearInterval(interval);

@@ -218,7 +218,7 @@ export const searchCategories = async (searchTerm) => {
             };
         }
 
-        // Dividir el término en palabras individuales
+        
         const palabras = searchTerm.trim().split(" ");
 
         let query = supabase
@@ -226,7 +226,7 @@ export const searchCategories = async (searchTerm) => {
             .select("*")
             .eq("estado_categoria", true);
 
-        // Buscar por cada palabra en nombre_categoria O descripcion
+      
         const condiciones = palabras
             .map(palabra => `nombre_categoria.ilike.%${palabra}%,descripcion.ilike.%${palabra}%`)
             .join(";");

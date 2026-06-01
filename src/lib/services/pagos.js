@@ -239,7 +239,7 @@ export const getPaymentsSummaryToday = async () => {
 
         if (error) throw error;
 
-        // Agrupar por método de pago
+   
         const resumen = {};
         data.forEach(pago => {
             const nombreMetodo = pago.metodos_pago.nombre_metodo;

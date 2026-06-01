@@ -6,74 +6,7 @@ import {
 } from "../services/token.js";
 
 
-/*export const loginStep1 = async (email, password) => {
-    try {
-        if (!email || !password) {
-            return {
-                success: false,
-                error: "Email y contraseña son requeridos"
-            };
-        }
 
-        // Autenticar en Supabase Auth
-        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
-
-        if (authError) throw authError;
-
-       
-        const { data: userData, error: userError } = await supabase
-            .from("usuarios")
-            .select("*, roles(nombre_rol, permisos)")
-            .eq("email", email).single();
-
-        console.log("Email buscado:", email);
-console.log("userData:", userData);
-console.log("userError:", userError);
-
-        if (userError && userError.code !== 'PGRST116') {
-            throw userError;
-        }
-
-        // Si no existe en la tabla usuarios
-        if (!userData || userData.length === 0) {
-            await supabase.auth.signOut();
-            return {
-                success: false,
-                error: "Usuario no encontrado en el sistema. Contacta al administrador."
-            };
-        }
-
-        
-        // Generar y enviar código temporal para 2FA
-        const codeResult = await generateAndSendTemporaryCode(email);
-        console.log("Respuesta de Resend:", emailResult);
-        if (!codeResult.success) {
-            await supabase.auth.signOut();
-            return {
-                success: false,
-                error: "Error al generar código temporal. Intenta nuevamente."
-            };
-        }
-
-        return {
-            success: true,
-            message: "Se envió un código temporal a tu email",
-            requiresCode: true,
-            email: email
-        };
-
-    } catch (error) {
-        console.error("Error en loginStep1:", error);
-        return {
-            success: false,
-            error: error.message || "Error en el login"
-        };
-    }
-};
-*/
 
 export const loginStep1 = async (emailOrUsername, password) => {
     try {
@@ -128,7 +61,7 @@ export const loginStep1 = async (emailOrUsername, password) => {
         };
     }
 };
-// ============ PASO 2: LOGIN - Verificar Código Temporal (2FA) ============
+
 export const loginStep2 = async (email, codigoTemporal) => {
     try {
         if (!email || !codigoTemporal) {
@@ -178,7 +111,7 @@ export const loginStep2 = async (email, codigoTemporal) => {
             };
         }
 
-        // Validar expiración
+       
         const ahora = new Date();
         const fechaExpiracion = new Date(user.codigo_expiracion);
 
@@ -190,12 +123,11 @@ export const loginStep2 = async (email, codigoTemporal) => {
             };
         }
 
-        // Obtener sesión actual
+        
         const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
 
         if (sessionError) throw sessionError;
 
-        // Actualizar usuario: marcar como verificado y resetear intentos
         const { error: updateError } = await supabase
             .from("usuarios")
             .update({
@@ -226,7 +158,7 @@ export const loginStep2 = async (email, codigoTemporal) => {
     }
 };
 
-// ============ REGISTRO - Nuevo Usuario ============
+
 export const register = async (email, password, nombreUsuario, codigoInvitacion) => {
     try {
         // Validar token de invitación
@@ -320,7 +252,7 @@ export const register = async (email, password, nombreUsuario, codigoInvitacion)
     }
 };
 
-// ============ VERIFICACIÓN DE CÓDIGO POST-REGISTRO ============
+
 export const verifyRegistrationCode = async (email, code) => {
     try {
         if (!email || !code) {
