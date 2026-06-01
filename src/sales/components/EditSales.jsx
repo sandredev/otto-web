@@ -268,56 +268,58 @@ export default function EditSales() {
                             {carrito.map(item => (
                                 <div
                                     key={item.id}
-                                    className="flex items-center gap-3 bg-gray-50 rounded-xl p-3 border border-gray-200"
+                                    className="gap-3 bg-gray-50 rounded-xl p-3 border border-gray-200"
                                 >
-                                    {/* Imagen */}
-                                    <img
-                                        src={item.img}
-                                        alt={item.name}
-                                        className="w-14 h-14 object-cover rounded-lg flex-shrink-0"
-                                    />
+                                    <div className="flex items-center justify-between mb-2">
+                                        {/* Imagen */}
+                                        <img
+                                            src={item.img}
+                                            alt={item.name}
+                                            className="w-14 h-14 object-cover mr-2 rounded-lg flex-shrink-0"
+                                        />
 
-                                    {/* Info */}
-                                    <div className="flex-1 min-w-0">
-                                        <p className="font-semibold text-sm text-gray-900 truncate">
-                                            {item.name}
-                                        </p>
-                                        <p className="text-yellow-otto text-sm font-medium">
-                                            ${item.precio.toLocaleString('es-CO')}
-                                        </p>
-                                    </div>
-
-                                    {/* Controles cantidad */}
-                                    <div className="flex items-center gap-2 flex-shrink-0">
+                                        {/* Info */}
+                                        <div className="flex-1 min-w-0">
+                                            <p className="font-semibold text-sm text-gray-900 truncate">
+                                                {item.name}
+                                            </p>
+                                            <p className="text-sm">
+                                                ${item.precio.toLocaleString('es-CO')}
+                                            </p>
+                                        </div>
+                                        {/* Eliminar */}
                                         <button
-                                            onClick={() => disminuirCantidad(item.id)}
-                                            className="cursor-pointer bg-yellow-otto text-white w-6 h-6 rounded flex items-center justify-center hover:brightness-95"
+                                            onClick={() => eliminarDelCarrito(item.id)}
+                                            className="cursor-pointer text-red-400 hover:text-red-600 transition-colors flex-shrink-0"
                                         >
-                                            <FontAwesomeIcon icon={faMinus} size="xs" />
-                                        </button>
-                                        <span className="w-6 text-center text-sm font-bold">
-                                            {item.cantidad}
-                                        </span>
-                                        <button
-                                            onClick={() => aumentarCantidad(item.id)}
-                                            className="cursor-pointer bg-yellow-otto text-white w-6 h-6 rounded flex items-center justify-center hover:brightness-95"
-                                        >
-                                            <FontAwesomeIcon icon={faPlus} size="xs" />
+                                            <FontAwesomeIcon icon={faTrash} size="sm" />
                                         </button>
                                     </div>
+                                    <div className="flex items-center justify-between">
+                                        {/* Controles cantidad */}
+                                        <div className="flex items-center gap-2">
+                                            <button
+                                                onClick={() => disminuirCantidad(item.id)}
+                                                className="cursor-pointer bg-yellow-otto text-white w-6 h-6 rounded flex items-center justify-center hover:brightness-95"
+                                            >
+                                                <FontAwesomeIcon icon={faMinus} size="xs" />
+                                            </button>
+                                            <span className="w-6 h-6 text-center bg-gray-200 rounded text-sm font-semibold">
+                                                {item.cantidad}
+                                            </span>
+                                            <button
+                                                onClick={() => aumentarCantidad(item.id)}
+                                                className="cursor-pointer bg-yellow-otto text-white w-6 h-6 rounded flex items-center justify-center hover:brightness-95"
+                                            >
+                                                <FontAwesomeIcon icon={faPlus} size="xs" />
+                                            </button>
+                                        </div>
 
-                                    {/* Subtotal */}
-                                    <p className="text-sm font-bold text-gray-900 w-20 text-right flex-shrink-0">
-                                        ${(item.precio * item.cantidad).toLocaleString('es-CO')}
-                                    </p>
-
-                                    {/* Eliminar */}
-                                    <button
-                                        onClick={() => eliminarDelCarrito(item.id)}
-                                        className="cursor-pointer text-red-400 hover:text-red-600 transition-colors flex-shrink-0"
-                                    >
-                                        <FontAwesomeIcon icon={faTrash} size="sm" />
-                                    </button>
+                                        {/* Subtotal */}
+                                        <p className="text-sm font-semibold text-gray-900 w-20 text-right flex-shrink-0">
+                                            ${(item.precio * item.cantidad).toLocaleString('es-CO')}
+                                        </p>
+                                    </div>
                                 </div>
                             ))}
                         </div>

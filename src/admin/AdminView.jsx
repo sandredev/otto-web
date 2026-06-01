@@ -57,7 +57,7 @@ export default function AdminView(){
 
             <div className='flex flex-col sm:flex-row justify-center items-stretch sm:items-center gap-3 w-full my-6 sm:my-8'>
                 <Link to={'/sales/history'}>
-                    <PrimaryButton type={'button'} text={'Ventas Del día'}/>
+                    <PrimaryButton type={'button'} text={'Ventas del día'}/>
                 </Link>
                 
                 <Link to={'/generalHistory'}>

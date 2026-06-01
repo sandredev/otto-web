@@ -46,8 +46,8 @@ export default function SalesMoney() {
                 <div className='w-3/5 sm:w-4/5 aspect-square'>
                     <img src={nequiLogo} alt='Nequi' className='w-full h-full object-contain'/>
                 </div>
-                <span className='font-normal text-xs sm:text-base lg:text-xl'>Nequi</span>
-                <div className='font-bold text-sm sm:text-lg lg:text-xl text-green-600'>
+                <span className='font-bold text-sm sm:text-base lg:text-xl'>Nequi</span>
+                <div className='font-bold text-sm sm:text-lg lg:text-xl text-yellow-otto'>
                     {loading ? 'Cargando...' : formatMoney(nequiMoney)}
                 </div>
             </div>
@@ -57,8 +57,8 @@ export default function SalesMoney() {
                 <div className='w-3/5 sm:w-4/5 aspect-square'>
                     <img src={moneyImg} alt='Efectivo' className='w-full h-full object-cover rounded-xl sm:rounded-2xl'/>
                 </div>
-                <span className='font-normal text-xs sm:text-base lg:text-xl'>Efectivo</span>
-                <div className='font-bold text-sm sm:text-lg lg:text-xl text-blue-600'>
+                <span className='font-bold text-sm sm:text-base lg:text-xl'>Efectivo</span>
+                <div className='font-bold text-sm sm:text-lg lg:text-xl text-yellow-otto'>
                     {loading ? 'Cargando...' : formatMoney(cashMoney)}
                 </div>
             </div>
