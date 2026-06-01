@@ -4,7 +4,6 @@ import { getSalesToday, getSaleDetails } from '@/lib/services/ventas.js';
 import ReceiptModal from '../components/ReceiptModal';
 import alertPop from '@/utils/alertPop.js';
 
-
 export default function DiarySales() {
     const [sales, setSales] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -50,7 +49,7 @@ export default function DiarySales() {
         cargarVentas();
     }, []);
 
-    // Manejar click en fila para ver recibo
+  
     const handleVerRecibo = async (idVenta) => {
         setLoading(true);
         const result = await getSaleDetails(idVenta);
@@ -94,6 +93,7 @@ export default function DiarySales() {
             <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
                 <Table
                     rowData={sales}
+                    onVerRecibo={handleVerRecibo}
                     columnDefs={[
                         {
                             headerName: 'ID',
