@@ -229,13 +229,14 @@ export const getPaymentsSummaryToday = async () => {
         const finDelDia = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1).toISOString();
 
         const { data, error } = await supabase
-            .from("pagos")
-            .select(`
-                monto,
-                metodos_pago(id_metodo, nombre_metodo)
-            `)
-            .gte("fecha_pago", inicioDelDia)
-            .lt("fecha_pago", finDelDia);
+        .from("pagos")
+        .select(`
+            monto,
+            metodos_pago(id_metodo, nombre_metodo),
+            ventas!inner(fecha_venta)
+        `)
+        .gte("ventas.fecha_venta", inicioDelDia)
+        .lt("ventas.fecha_venta", finDelDia);
 
         if (error) throw error;
 
